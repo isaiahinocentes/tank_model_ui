@@ -1,10 +1,9 @@
 #pragma once
-#include <iostream>
-#include <cstring>
-#include <fstream>
-#include <msclr\marshal_cppstd.h>
-
-//#include "TankFunctions.h"
+#include <iostream>	//cout cin
+#include <cstring>	//String Functions
+#include <fstream>	//Filestream
+#include <msclr\marshal_cppstd.h> //convert string^ to string
+#include "Functions.h"
 
 
 namespace TankModel {
