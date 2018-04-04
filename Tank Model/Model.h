@@ -7,6 +7,7 @@
 #include <time.h>	//time
 #include <iomanip>	//For Output Formatting
 #include <vector>	//Vectors
+#include "form_menu.h"
 
 using namespace std;
 
@@ -18,13 +19,13 @@ static void line(string, double);
 static void line(string);
 double n;
 
-//
+//liters/second = mm³/day
 static double QComp, QC_ave;
 static vector<double> vQCalculated;
 static double QObs, QO_ave;
 static vector<double> vQObserved;
 
-//RainFall mm/day
+//RainFall mm³/day
 static double RFall;
 
 //Drainage Area in km²
@@ -38,7 +39,7 @@ static double TA;
 //Precipitaiton in mm/day
 static double Prec = 0, Prec_ave;
 //Precipitaiton in mm/day
-static vector<double> vPrecipiation;
+static vector<double> vPrecipitation;
 //Evaporation mm/day
 static double Evap = 0, Evap_ave;
 //Evaporation mm/day
@@ -71,6 +72,54 @@ static double YD1;
 
 //Discharge(Qx) Multipliers | 0 or 1
 static double nA1, nA2, nB1, nC1, nD1;
+
+//Show the Values to Log textbox
+static void getFromFile(System::Windows::Forms::TextBox^ Log) {
+	Log->Text = "";
+	Log->Text += "Drainage Area: "+DA_mm+"\n";
+	Log->Text += "Tank Height: "+TA+"\n";
+	Log->Text += "Precipitation \t\t QObserved\n";
+	for (int i = 0; i < vPrecipitation.size() && i < vQObserved.size(); i++) {
+		Log->Text += vPrecipitation.at(i)+"\t"+vQObserved.at(i)+"\n";
+	}
+}
+
+//Reset Values
+static void resetValues() {
+
+	QComp = 0; QC_ave = 0;
+	vQCalculated.clear();
+
+	QObs = 0; QO_ave = 0;
+	vQObserved.clear();
+
+	RFall = 0;
+	
+	DA_km = 0;
+	DA_mm = 0;
+
+	TA = 0;
+
+	Prec = 0; Prec_ave = 0;
+	vPrecipitation.clear();
+
+	Evap = 0; Evap_ave = 0;
+	vEvaporation.clear();
+
+	QA1 = 0; QA2 = 0; QA0 = 0;
+	QB1 = 0; QB0 = 0; 
+	QC1 = 0; QC0 = 0;
+	QD1 = 0;
+
+	hA = 0; hB = 0; hC = 0; hD = 0;
+	HA = 0; HB = 0; HC = 0; HD = 0;
+
+	YA1 = 0; YA2 = 0;
+	YB1 = 0;
+	YC1 = 0;
+	YD1 = 0;
+
+}
 
 //Intialize the variables
 static void init() {
@@ -120,6 +169,7 @@ static void init() {
 	line("YA1: ", YA1);
 }
 
+//This uses percentage
 static void init_Qs() {
 
 	//Say QO = 100;
@@ -177,6 +227,8 @@ static void init_Qs() {
 	cout << endl;
 
 }
+
+
 
 static void showResults() {
 

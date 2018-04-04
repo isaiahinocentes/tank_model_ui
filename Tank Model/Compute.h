@@ -2,7 +2,7 @@
 #include "Model.h" //Tank Model Variables
 #include <iomanip> //For output formatting
 
-//l/ps to mm/day
+//l/ps to mm³/day
 static double lps2mmd(double lps) {
 	return (lps * 1000000) / 87400l;
 }
@@ -30,11 +30,11 @@ static double ave_QO() {
 //Get Average Precipitation
 static double ave_Prec() {
 	double sum = 0;
-	for each (double p in vPrecipiation)
+	for each (double p in vPrecipitation)
 	{
 		sum += p;
 	}
-	double ave = sum / sizeof(vPrecipiation);
+	double ave = sum / sizeof(vPrecipitation);
 	cout << "Average for Precipitation: " << ave << endl;
 	return ave;
 }
@@ -60,12 +60,6 @@ static void compute_h() {
 		hB = c_hB(QA0, QB1, QB0);
 		hC = c_hC(QB0, QC1, QC0);
 		hD = c_hD(QC0, QD1);
-
-		cout << "Values for \"h\": " << endl
-			<< "hA:" << setprecision(10) << hA << endl
-			<< "hB:" << setprecision(10) << hB << endl
-			<< "hC:" << setprecision(10) << hC << endl
-			<< "hD:" << setprecision(10) << hD << endl << endl;
 	}
 }
 
@@ -90,12 +84,6 @@ static void compute_H() {
 		HB = c_HB(hB);
 		HC = c_HC(hD);
 		HD = c_HD(hD);
-
-		cout << "Values for \"H - Water Levels\": " << endl
-			<< "HA:" << setprecision(10) << HA << endl
-			<< "HB:" << setprecision(10) << HB << endl
-			<< "HC:" << setprecision(10) << HC << endl
-			<< "HD:" << setprecision(10) << HD << endl << endl;
 	}
 }
 
@@ -129,6 +117,9 @@ static double c_nD1() {
 		return 1;
 	}
 	return 0;
+}
+static double c_n() {
+	c_nA1();
 }
 
 //Compute QC

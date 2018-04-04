@@ -22,33 +22,30 @@ static void read_file_init(string path) {
 	//Set the Drainage Area to mm units
 	file >> str;
 	DA_km = atof(str.c_str());
+	//Conver km² to mm²
 	DA_mm = km2mm(DA_km);
-
-
+	
+	//Get Tank Height
 	file >> str;
 	TA = atof(str.c_str());
 
-	cout << "Drainage Area: " << DA_km << "\t|\t" << setprecision(5) << DA_mm << endl;
-	cout << "Tank Height: " << TA << endl << endl;;
-
+	//Read the P and Qo from the file
 	while (!file.eof()) {
-
+		//Read Precipitation
 		file >> str;
-		vPrecipiation.push_back(atof(str.c_str()));
+		vPrecipitation.push_back(atof(str.c_str()));
+
+		//Read QObserved
 		file >> str;
 		double qo = atof(str.c_str());
+		//Convert QObserved to mm³/day
 		qo = lps2mmd(qo);
 		vQObserved.push_back(qo);
-
-		cout << "Data[" << row << "]:" << endl
-			<< "P: " << vPrecipiation.at(row) << endl
-			<< "QO: " << vQObserved.at(row) << endl;
+		
 		row++;
 	}
 
-	cout << endl;
+	//Get the Averages of QO and Precipitaion | for chtng
 	QO_ave = ave_QO();
-	cout << QO_ave << endl;
 	Prec_ave = ave_Prec();
-	cout << Prec_ave << endl;
 }
