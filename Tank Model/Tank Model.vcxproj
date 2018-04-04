@@ -136,6 +136,10 @@
     <ClCompile Include="TankCompute.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\Compute.h" />
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\Functions.h" />
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\Model.h" />
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\OEF.h" />
     <ClInclude Include="form_menu.h">
       <FileType>CppForm</FileType>
     </ClInclude>

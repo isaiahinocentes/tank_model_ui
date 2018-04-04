@@ -54,8 +54,8 @@ namespace TankModel {
 	private: System::Windows::Forms::Button^  btn_upload;
 	protected:
 
-	private: System::Windows::Forms::Button^  btn_read;
-	private: System::Windows::Forms::Button^  btn_init;
+
+
 	private: System::Windows::Forms::Button^  btn_display;
 	private: System::Windows::Forms::Button^  btn_optimize;
 	private: System::Windows::Forms::Label^  label1;
@@ -86,8 +86,6 @@ namespace TankModel {
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(form_menu::typeid));
 			this->btn_reset = (gcnew System::Windows::Forms::Button());
 			this->btn_upload = (gcnew System::Windows::Forms::Button());
-			this->btn_read = (gcnew System::Windows::Forms::Button());
-			this->btn_init = (gcnew System::Windows::Forms::Button());
 			this->btn_display = (gcnew System::Windows::Forms::Button());
 			this->btn_optimize = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -112,6 +110,7 @@ namespace TankModel {
 			this->btn_reset->TabIndex = 0;
 			this->btn_reset->Text = L"RESET";
 			this->btn_reset->UseVisualStyleBackColor = false;
+			this->btn_reset->Click += gcnew System::EventHandler(this, &form_menu::btn_reset_Click);
 			// 
 			// btn_upload
 			// 
@@ -126,31 +125,6 @@ namespace TankModel {
 			this->btn_upload->Text = L"Upload File";
 			this->btn_upload->UseVisualStyleBackColor = false;
 			this->btn_upload->Click += gcnew System::EventHandler(this, &form_menu::btn_upload_Click);
-			// 
-			// btn_read
-			// 
-			this->btn_read->BackColor = System::Drawing::Color::SpringGreen;
-			this->btn_read->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btn_read->Location = System::Drawing::Point(138, 110);
-			this->btn_read->Name = L"btn_read";
-			this->btn_read->Size = System::Drawing::Size(153, 55);
-			this->btn_read->TabIndex = 2;
-			this->btn_read->Text = L"READ DATA";
-			this->btn_read->UseVisualStyleBackColor = false;
-			this->btn_read->Click += gcnew System::EventHandler(this, &form_menu::read_click);
-			// 
-			// btn_init
-			// 
-			this->btn_init->BackColor = System::Drawing::SystemColors::ActiveCaption;
-			this->btn_init->Font = (gcnew System::Drawing::Font(L"Times New Roman", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btn_init->Location = System::Drawing::Point(138, 171);
-			this->btn_init->Name = L"btn_init";
-			this->btn_init->Size = System::Drawing::Size(153, 66);
-			this->btn_init->TabIndex = 3;
-			this->btn_init->Text = L"Initialize Water Levels";
-			this->btn_init->UseVisualStyleBackColor = false;
 			// 
 			// btn_display
 			// 
@@ -168,7 +142,7 @@ namespace TankModel {
 			this->btn_optimize->BackColor = System::Drawing::Color::MediumOrchid;
 			this->btn_optimize->Font = (gcnew System::Drawing::Font(L"Times New Roman", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btn_optimize->Location = System::Drawing::Point(380, 315);
+			this->btn_optimize->Location = System::Drawing::Point(138, 110);
 			this->btn_optimize->Name = L"btn_optimize";
 			this->btn_optimize->Size = System::Drawing::Size(97, 48);
 			this->btn_optimize->TabIndex = 5;
@@ -228,7 +202,7 @@ namespace TankModel {
 			// 
 			// pic_oef
 			// 
-			this->pic_oef->Location = System::Drawing::Point(380, 180);
+			this->pic_oef->Location = System::Drawing::Point(324, 171);
 			this->pic_oef->Name = L"pic_oef";
 			this->pic_oef->Size = System::Drawing::Size(230, 76);
 			this->pic_oef->TabIndex = 11;
@@ -238,7 +212,7 @@ namespace TankModel {
 			// txt_debug
 			// 
 			this->txt_debug->AcceptsTab = true;
-			this->txt_debug->Location = System::Drawing::Point(324, 82);
+			this->txt_debug->Location = System::Drawing::Point(363, 81);
 			this->txt_debug->Name = L"txt_debug";
 			this->txt_debug->Size = System::Drawing::Size(182, 20);
 			this->txt_debug->TabIndex = 12;
@@ -274,8 +248,6 @@ namespace TankModel {
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->btn_optimize);
 			this->Controls->Add(this->btn_display);
-			this->Controls->Add(this->btn_init);
-			this->Controls->Add(this->btn_read);
 			this->Controls->Add(this->btn_upload);
 			this->Controls->Add(this->btn_reset);
 			this->Name = L"form_menu";
@@ -351,11 +323,10 @@ private: System::Void btn_upload_Click(System::Object^  sender, System::EventArg
 	// a .CUR file was selected, open it.  
 	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 	{
-		string path = marshal_as<string>(openFileDialog1->FileName) + "HAHAHA";
-		String ^managed;
+		string path = marshal_as<string>(openFileDialog1->FileName);
+		String ^managed = marshal_as<String^>(path);
 		ifstream file(path);
 		printf("FILE PATH: ");
-		managed = marshal_as<String^>(path);
 		cout << "FILE PATH: " << path;
 		this->Log->Text = managed;
 		MessageBox::Show(openFileDialog1->FileName, "Path:");
@@ -366,6 +337,8 @@ private: System::Void btn_upload_Click(System::Object^  sender, System::EventArg
 		//		openFileDialog1->OpenFile());
 	}
 
+}
+private: System::Void btn_reset_Click(System::Object^  sender, System::EventArgs^  e) {
 }
 };
 }

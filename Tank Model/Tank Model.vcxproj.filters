@@ -32,6 +32,18 @@
     <ClInclude Include="TankFunctions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\Compute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tank_Model_Source\Tank_Model_Source\OEF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="form_menu.resx">
