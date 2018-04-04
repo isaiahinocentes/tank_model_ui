@@ -1,7 +1,5 @@
 #pragma once
-#include <vector> //Vectors
-
-using namespace std;
+#include <vector>
 
 //Function Prototypes
 static double mean(vector<double>);
@@ -10,6 +8,8 @@ static double sqsum(vector<double>);
 static double stdev(vector<double>);
 static vector<double> operator-(vector<double>, double);
 static vector<double> operator*(vector<double>, vector<double>);
+
+using namespace std;
 
 //Correlation Function
 static double coeffcorrel(vector<double> QC, vector<double> QO)

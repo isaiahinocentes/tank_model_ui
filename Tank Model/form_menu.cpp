@@ -12,7 +12,7 @@ SubSystem = Windows
 Entry Point = Main
 */
 [STAThread]
-void Main(array<String^>^ args)
+void Main(cli::array<String^>^ args)
 {
 	//Set Application Settings
 	Application::EnableVisualStyles();

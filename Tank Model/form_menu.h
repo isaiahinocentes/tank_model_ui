@@ -17,9 +17,6 @@ namespace TankModel {
 	using namespace std;
 	using namespace msclr::interop;
 
-
-	
-
 	string rmse ="Root Squared Mean Error, RMSE";
 	string mae = "Mean Absolute Error, MAE";
 	string r =   "Correlation Coefficient, R";

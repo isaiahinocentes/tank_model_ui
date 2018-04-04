@@ -1,10 +1,8 @@
 #pragma once
 #include <fstream>	//filestream
-#include <sstream>	//for istringstream iss
 #include <iostream>	//cout / cin
 #include <string>	//for: cout << <string>
 #include <string.h>	//String Manipulation
-#include <vector>	//Vectors
 #include <iomanip>	//Showing Precisions
 #include "Model.h"	//Tank Model Variables	
 #include "Compute.h" //Computations and Conversions
