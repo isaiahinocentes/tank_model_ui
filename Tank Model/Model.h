@@ -12,7 +12,8 @@
 using namespace std;
 
 //Function Prototypes
-static void init();
+static void init_Qs(double);
+static void init_Heights(double);
 static double random();
 static void line(double);
 static void line(string, double);
@@ -32,9 +33,6 @@ static double RFall;
 static double DA_km;
 //Drainage Area in mm²
 static double DA_mm;
-
-//Tank Height
-static double TA;
 
 //Precipitaiton in mm/day
 static double Prec = 0, Prec_ave;
@@ -63,8 +61,10 @@ static double  HB;
 static double  HC;
 static double  HD;
 
+//Tank Height
+static double TankHeight;
 //Height of the Orifice in the Tanks
-static double YA1 = 0; //The top level orifice.
+static double YA1; //The top level orifice.
 static double YA2;
 static double YB1;
 static double YC1;
@@ -73,15 +73,48 @@ static double YD1;
 //Discharge(Qx) Multipliers | 0 or 1
 static double nA1, nA2, nB1, nC1, nD1;
 
-//Show the Values to Log textbox
-static void getFromFile(System::Windows::Forms::TextBox^ Log) {
-	Log->Text = "";
-	Log->Text += "Drainage Area: "+DA_mm+"\n";
-	Log->Text += "Tank Height: "+TA+"\n";
-	Log->Text += "Precipitation \t\t QObserved\n";
-	for (int i = 0; i < vPrecipitation.size() && i < vQObserved.size(); i++) {
-		Log->Text += vPrecipitation.at(i)+"\t"+vQObserved.at(i)+"\n";
-	}
+//---------------------------
+//Init Qs Depending on QO | This uses percentage
+static void init_Heights(double QOAve) {
+	init_Qs(QOAve);
+	
+	YA1 = 0;
+	YA2 = (QA1 + QA2 + QA0) / 3;
+	YB1 = (QB1 + QB0) / 2;
+	YC1 = (QC1 + QC0) / 2;
+	YD1 = QD1;
+
+	TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
+}
+
+//Init Qs Depending on QO | This uses percentage
+static void init_Qs(double QO) {
+
+	QA1 = QO * .48;
+	line("QA1: ", QA1);
+
+	QA2 = QO * .33;
+	line("QA2: ", QA2);
+
+	QA0 = QO * .17;
+	line("QA0: ", QA0);
+
+	QB1 = QO * .9;
+	line("QB1: ", QB1);
+
+	QB0 = QO * .6;
+	line("QB0: ", QB0);
+
+	QC1 = QO * .3;
+	line("QC1: ", QC1);
+
+	QC0 = QO * .2;
+	line("QC0: ", QC0);
+
+	QD1 = QO * .1;
+	line("QD1: ", QD1);
+	cout << endl;
+
 }
 
 //Reset Values
@@ -94,11 +127,11 @@ static void resetValues() {
 	vQObserved.clear();
 
 	RFall = 0;
-	
+
 	DA_km = 0;
 	DA_mm = 0;
 
-	TA = 0;
+	TankHeight = 0;
 
 	Prec = 0; Prec_ave = 0;
 	vPrecipitation.clear();
@@ -107,7 +140,7 @@ static void resetValues() {
 	vEvaporation.clear();
 
 	QA1 = 0; QA2 = 0; QA0 = 0;
-	QB1 = 0; QB0 = 0; 
+	QB1 = 0; QB0 = 0;
 	QC1 = 0; QC0 = 0;
 	QD1 = 0;
 
@@ -121,93 +154,12 @@ static void resetValues() {
 
 }
 
-//Intialize the variables
-static void init() {
-
-	Prec = pow(random(), 2); //The output value was to small.
-	line("Prec: ", Prec);
-
-	Evap = 0;
-
-	QA1 = fmod(random(), Prec);
-	line("QA1: ", QA1);
-
-	QA2 = fmod(random(), QA1);
-	line("QA2: ", QA2);
-
-	QA0 = fmod(random(), QA2);
-	line("QA0: ", QA0);
-
-	QB1 = fmod(random(), QA0);
-	line("QB1: ", QB1);
-
-	QB0 = fmod(random(), QB1);
-	line("QB0: ", QB0);
-
-	QC1 = fmod(random(), QB0);
-	line("QC1: ", QC1);
-
-	QC0 = fmod(random(), QC1);
-	line("QC0: ", QC0);
-
-	QD1 = fmod(random(), QC0);
-	line("QD1: ", QD1);
-
-	YD1 = random();
-	line("YD1: ", YD1);
-
-	YC1 = fmod(random(), YD1);
-	line("YC1: ", YC1);
-
-	YB1 = fmod(random(), YC1);
-	line("YB1: ", YB1);
-
-	YA2 = fmod(random(), YB1);
-	line("YA2: ", YA2);
-
-	YA1 = 0;
-	line("YA1: ", YA1);
+//generate randome
+static double random() {
+	n = rand();
+	return n;
 }
-
-//This uses percentage
-static void init_Qs(double QO) {
-
-	QA1 = QO_ave * .9;
-	line("QA1: ", QA1);
-
-	//QA2 = fmod(random(), QA1);
-	QA2 = QO_ave * .8;
-	line("QA2: ", QA2);
-
-	//QA0 = fmod(random(), QA2);
-	QA0 = QO_ave * .7;
-	line("QA0: ", QA0);
-
-	//QB1 = fmod(random(), QA0);
-	QB1 = QO_ave * .6;
-	line("QB1: ", QB1);
-
-	//QB0 = fmod(random(), QB1);
-	QB0 = QO_ave * .5;
-	line("QB0: ", QB0);
-
-	//QC1 = fmod(random(), QB0);
-	QC1 = QO_ave * .4;
-	line("QC1: ", QC1);
-
-	//QC0 = fmod(random(), QC1);
-	QC0 = QO_ave * .3;
-	line("QC0: ", QC0);
-
-	//QD1 = fmod(random(), QC0);
-	QD1 = QO_ave * .2;
-	line("QD1: ", QD1);
-	cout << endl;
-
-}
-
-
-
+//Printing Functions
 static void showResults() {
 
 	cout << "P, E, A | mm/day:" << "\n";
@@ -248,13 +200,16 @@ static void showResults() {
 		QC1*nC1 << " + " <<
 		QD1*nD1 << " = " << QComp;
 }
-
-//generate randome
-static double random() {
-	n = rand();
-	return n;
+//Show the Values to Log textbox
+static void getFromFile(System::Windows::Forms::TextBox^ Log) {
+	Log->Text = "";
+	Log->Text += "Drainage Area: " + DA_mm + "\n";
+	Log->Text += "Tank Height: " + TankHeight + "\n";
+	Log->Text += "Precipitation \t\t QObserved\n";
+	for (int i = 0; i < vPrecipitation.size() && i < vQObserved.size(); i++) {
+		Log->Text += vPrecipitation.at(i) + "\t" + vQObserved.at(i) + "\n";
+	}
 }
-//Printing Functions
 static void line(double db) {
 	cout << db << "\n";
 }

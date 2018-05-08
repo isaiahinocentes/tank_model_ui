@@ -131,6 +131,7 @@ namespace TankModel {
 				this->btn_display->TabIndex = 4;
 				this->btn_display->Text = L"Display Results";
 				this->btn_display->UseVisualStyleBackColor = true;
+				this->btn_display->Click += gcnew System::EventHandler(this, &form_menu::btn_display_Click);
 				// 
 				// btn_optimize
 				// 
@@ -185,10 +186,8 @@ namespace TankModel {
 				// 
 				this->cbx_oef->FormattingEnabled = true;
 				this->cbx_oef->Items->AddRange(gcnew cli::array< System::Object^  >(4) {
-						L"Root Squared Mean Error, RMSE", 
-						L"Mean Absolute Error, MAE",
-						L"Correlation Coefficient, R",
-						L"Coefficient of determination, R2"
+					L"Root Squared Mean Error, RMSE", L"Mean Absolute Error, MAE",
+						L"Correlation Coefficient, R", L"Coefficient of determination, R2"
 				});
 				this->cbx_oef->Location = System::Drawing::Point(115, 108);
 				this->cbx_oef->Name = L"cbx_oef";
@@ -273,25 +272,28 @@ namespace TankModel {
 			openFileDialog1->Filter = "Text Files|*.txt";
 			openFileDialog1->Title = "Select a Text File";
 
-			if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-			{
-				string path = marshal_as<string>(openFileDialog1->FileName);
-				//Read file and Initialize Drainage Area, Tank Height, P and QO Series
-				read_file_init(path);
-				getFromFile(this->Log);
+				if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+				{
+					string path = marshal_as<string>(openFileDialog1->FileName);
+					//Read file and Initialize Drainage Area, Tank Height, P and QO Series
+					read_file_init(path);
+					getFromFile(this->Log);
+
+					//Initialize Tank heights here too
+					init_Heights(QO_ave);
 		
-				//Show Dialog of FilePath
-				/*
-				String ^managed = marshal_as<String^>(path);
-				this->Log->Text += managed;
-				MessageBox::Show(openFileDialog1->FileName, "Path:");
-				*/
+					//Show Dialog of FilePath
+					/*
+					String ^managed = marshal_as<String^>(path);
+					this->Log->Text += managed;
+					MessageBox::Show(openFileDialog1->FileName, "Path:");
+					*/
 
-				//Show Dialog of A,TA,P,QO
-				MessageBox::Show("File Read", "Success:");	
+					//Show Dialog of A,TA,P,QO
+					MessageBox::Show("File Read", "Success:");	
+				}
+
 			}
-
-		}
 			
 			private: System::Void btn_reset_Click(System::Object^  sender, System::EventArgs^  e) {
 				String ^managed;
@@ -306,30 +308,28 @@ namespace TankModel {
 			}
 			
 			private: System::Void btn_optimize_Click(System::Object^  sender, System::EventArgs^  e) {
+				//VALIDATIONS
 				//Check if EOF is chosen
 				int method;
 				if (this->cbx_oef->Text == "Root Squared Mean Error, RMSE") {
 					method = 1;
-				}
-				else if (this->cbx_oef->Text == "Correlation Coefficient, R") {
+				} else if (this->cbx_oef->Text == "Correlation Coefficient, R") {
 					method = 2;
-				}
-				else if (this->cbx_oef->Text == "Mean Absolute Error, MAE") {
+				} else if (this->cbx_oef->Text == "Mean Absolute Error, MAE") {
 					method = 3;
-				}
-				else {
+				} else {
 					MessageBox::Show("Please Select OEF", "Error:");
 					return;
 				}
-
 				//Check if text file is chosen
 				if (vPrecipitation.empty()) {
 					MessageBox::Show("Please text file", "Error:");
-					return;
-				}
-				else {
+					return; }
+				//---
 
-				}
+			}
+
+			private: System::Void btn_display_Click(System::Object^  sender, System::EventArgs^  e) {
 				
 			}
 	};

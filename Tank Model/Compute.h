@@ -2,11 +2,11 @@
 #include "Model.h" //Tank Model Variables
 #include <iomanip> //For output formatting
 
+//Conversions
 //l/ps to mm³/day
 static double lps2mmd(double lps) {
-	return (lps * 1000000) / 87400l;
+	return lps * 86400000000;
 }
-
 //km² to mm²
 static double km2mm(double km) {
 	return km * 1000000000000;
@@ -39,7 +39,7 @@ static double ave_Prec() {
 	return ave;
 }
 
-//Compute hA, hB, hC, hD
+//Water balance Equations
 static double c_hA(double p, double e, double qa1, double qa2, double qa0) {
 	return p - e - qa1 - qa2 - qa0;
 }
@@ -63,64 +63,7 @@ static void compute_h() {
 	}
 }
 
-//Compute HA, HB, HC, HD
-static double c_HA(double hA) {
-	return hA / DA_mm;
-}
-static double c_HB(double hB) {
-	return hB / DA_mm;
-}
-static double c_HC(double hC) {
-	return hC / DA_mm;
-}
-static double c_HD(double hD) {
-	return hD / DA_mm;
-}
-static void compute_H() {
-	int n = vQObserved.size();
-	for (int i = 0; i < n; i++)
-	{
-		HA = c_HA(hA);
-		HB = c_HB(hB);
-		HC = c_HC(hD);
-		HD = c_HD(hD);
-	}
-}
 
-//Compute for Discharge Multiplirs
-static double c_nA1() {
-	if (HA > YA1) {
-		return 1;
-	}
-	return 0;
-}
-static double c_nA2() {
-	if (HA > YA2) {
-		return 1;
-	}
-	return 0;
-}
-static double c_nB1() {
-	if (HB > YB1) {
-		return 1;
-	}
-	return 0;
-}
-static double c_nC1() {
-	if (HC > YC1) {
-		return 1;
-	}
-	return 0;
-}
-static double c_nD1() {
-	if (HD > YD1) {
-		return 1;
-	}
-	return 0;
-}
-static double c_n() {
-	c_nA1();
-}
 
 //Compute QC
 static void compute() {
@@ -129,7 +72,7 @@ static void compute() {
 	{
 		init_Qs(vQObserved.at(i));
 
-		hA = c_hA(vPrecipiation.at(i), Evap, QA1, QA2, QA0); //The first parameter should be Precipitation.at(i)
+		hA = c_hA(vPrecipitation.at(i), Evap, QA1, QA2, QA0); 
 		hB = c_hB(QA0, QB1, QB0);
 		hC = c_hC(QB0, QC1, QC0);
 		hD = c_hD(QC0, QD1);

@@ -27,7 +27,7 @@ static void read_file_init(string path) {
 	
 	//Get Tank Height
 	file >> str;
-	TA = atof(str.c_str());
+	TankHeight = atof(str.c_str());
 
 	//Read the P and Qo from the file
 	while (!file.eof()) {
