@@ -21,6 +21,7 @@ namespace TankModel {
 	string rmse ="Root Squared Mean Error, RMSE";
 	string mae = "Mean Absolute Error, MAE";
 	string r =   "Correlation Coefficient, R";
+	string r2 = "Coefficient of determination, R2";
 
 	/// <summary>
 	/// Summary for form_menu
@@ -183,9 +184,11 @@ namespace TankModel {
 				// cbx_oef
 				// 
 				this->cbx_oef->FormattingEnabled = true;
-				this->cbx_oef->Items->AddRange(gcnew cli::array< System::Object^  >(3) {
-					L"Root Squared Mean Error, RMSE", L"Mean Absolute Error, MAE",
-						L"Correlation Coefficient, R"
+				this->cbx_oef->Items->AddRange(gcnew cli::array< System::Object^  >(4) {
+						L"Root Squared Mean Error, RMSE", 
+						L"Mean Absolute Error, MAE",
+						L"Correlation Coefficient, R",
+						L"Coefficient of determination, R2"
 				});
 				this->cbx_oef->Location = System::Drawing::Point(115, 108);
 				this->cbx_oef->Name = L"cbx_oef";
@@ -199,7 +202,7 @@ namespace TankModel {
 				// 
 				this->pic_oef->Location = System::Drawing::Point(115, 135);
 				this->pic_oef->Name = L"pic_oef";
-				this->pic_oef->Size = System::Drawing::Size(343, 115);
+				this->pic_oef->Size = System::Drawing::Size(201, 73);
 				this->pic_oef->TabIndex = 11;
 				this->pic_oef->TabStop = false;
 				this->pic_oef->MouseHover += gcnew System::EventHandler(this, &form_menu::show_formula);

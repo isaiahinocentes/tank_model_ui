@@ -170,30 +170,8 @@ static void init() {
 }
 
 //This uses percentage
-static void init_Qs() {
+static void init_Qs(double QO) {
 
-	//Say QO = 100;
-
-	/*
-	50
-	35
-	10
-	5
-
-	1 QA1 90
-	2 QA2 80
-	3 QA0 70
-
-	4 QB1 60
-	5 QB0 50
-
-	6 QC1 40
-	7 QC0 30
-
-	8 QD1 20
-	*/
-
-	//QA1 = fmod(random(), 0);
 	QA1 = QO_ave * .9;
 	line("QA1: ", QA1);
 

@@ -123,6 +123,56 @@ static double c_n() {
 }
 
 //Compute QC
+static void compute() {
+	int n = vQObserved.size();
+	for (int i = 0; i < n; i++)
+	{
+		init_Qs(vQObserved.at(i));
+
+		hA = c_hA(vPrecipiation.at(i), Evap, QA1, QA2, QA0); //The first parameter should be Precipitation.at(i)
+		hB = c_hB(QA0, QB1, QB0);
+		hC = c_hC(QB0, QC1, QC0);
+		hD = c_hD(QC0, QD1);
+
+		cout << "Values for \"h\": " << endl
+			<< "hA:" << setprecision(10) << hA << endl
+			<< "hB:" << setprecision(10) << hB << endl
+			<< "hC:" << setprecision(10) << hC << endl
+			<< "hD:" << setprecision(10) << hD << endl << endl;
+
+		nA1 = c_nA1(hA);
+		nA2 = c_nA2(hA);
+		nB1 = c_nB1(hB);
+		nC1 = c_nC1(hC);
+		nD1 = c_nD1(hD);
+
+		cout << "Multipliers [1/0]: " << endl
+			<< "A1:" << nA1 << endl
+			<< "A2:" << nA2 << endl
+			<< "B1:" << nB1 << endl
+			<< "C1:" << nC1 << endl
+			<< "D1:" << nD1 << endl << endl;
+
+		double tmp_QC =
+			(QA1 * nA1) +
+			(QA2 * nA2) +
+			(QB1 * nB1) +
+			(QC1 * nC1) +
+			(QD1 * nD1);
+
+		cout << "QC = " << endl
+			<< QA1 << "*" << nA1 << " + " << endl
+			<< QA2 << "*" << nA1 << " + " << endl
+			<< QB1 << "*" << nB1 << " + " << endl
+			<< QC1 << "*" << nC1 << " + " << endl
+			<< QD1 << "*" << nD1 << " = " << endl
+			<< tmp_QC << endl << endl;
+
+		vQCalculated.push_back(tmp_QC);
+	}
+
+	cout << "Finished Copmutations..." << endl << endl;
+}
 static double c_QC() {
 	return
 		(QA1 * nA1) +
