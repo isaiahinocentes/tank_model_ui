@@ -5,7 +5,7 @@
 //Conversions
 //l/ps to mm³/day
 static double lps2mmd(double lps) {
-	return lps * 86400000000;
+	return (lps * 86400000000) / DA_mm;
 }
 //km² to mm²
 static double km2mm(double km) {
@@ -52,49 +52,48 @@ static double c_hC(double qb0, double qc1, double qc0) {
 static double c_hD(double qc0, double qd1) {
 	return qc0 - qd1;
 }
-static void compute_h() {
-	int n = vQObserved.size();
-	for (int i = 0; i < n; i++)
-	{
-		hA = c_hA(vQObserved.at(i), Evap, QA1, QA2, QA0); //The first parameter should be Precipitation.at(i)
-		hB = c_hB(QA0, QB1, QB0);
-		hC = c_hC(QB0, QC1, QC0);
-		hD = c_hD(QC0, QD1);
-	}
+
+//Multipliers for QC
+static void compute_multipliers() {
+	QA1 >= YA1 ? nA1 = 1 : nA1 = 0;
+	QA2 >= YA2 ? nA2 = 1 : nA2 = 0;
+	QB1 >= YB1 ? nB1 = 1 : nB1 = 0;
+	QC1 >= YC1 ? nC1 = 1 : nC1 = 0;
+	QD1 >= YD1 ? nD1 = 1 : nD1 = 0;
 }
 
-
-
 //Compute QC
-static void compute() {
+static void compute(System::Windows::Forms::TextBox^ Log) {
+	
 	int n = vQObserved.size();
+	
+	Log->Text += "\r\n" + "----- QCs ----\r\n";
+	
 	for (int i = 0; i < n; i++)
 	{
+		//Initialize QS using QO
 		init_Qs(vQObserved.at(i));
 
-		hA = c_hA(vPrecipitation.at(i), Evap, QA1, QA2, QA0); 
+		//Calculate water level on tanks
+		hA = c_hA(vPrecipitation.at(i), Evap, QA1, QA2, QA0);  //This will be - if P = 0
 		hB = c_hB(QA0, QB1, QB0);
 		hC = c_hC(QB0, QC1, QC0);
 		hD = c_hD(QC0, QD1);
 
-		cout << "Values for \"h\": " << endl
+		/*cout << "Values for \"h\": " << endl
 			<< "hA:" << setprecision(10) << hA << endl
 			<< "hB:" << setprecision(10) << hB << endl
 			<< "hC:" << setprecision(10) << hC << endl
-			<< "hD:" << setprecision(10) << hD << endl << endl;
+			<< "hD:" << setprecision(10) << hD << endl << endl;*/
 
-		nA1 = c_nA1(hA);
-		nA2 = c_nA2(hA);
-		nB1 = c_nB1(hB);
-		nC1 = c_nC1(hC);
-		nD1 = c_nD1(hD);
+		compute_multipliers();
 
-		cout << "Multipliers [1/0]: " << endl
+		/*cout << "Multipliers [1/0]: " << endl
 			<< "A1:" << nA1 << endl
 			<< "A2:" << nA2 << endl
 			<< "B1:" << nB1 << endl
 			<< "C1:" << nC1 << endl
-			<< "D1:" << nD1 << endl << endl;
+			<< "D1:" << nD1 << endl << endl;*/
 
 		double tmp_QC =
 			(QA1 * nA1) +
@@ -103,47 +102,18 @@ static void compute() {
 			(QC1 * nC1) +
 			(QD1 * nD1);
 
-		cout << "QC = " << endl
+		/*cout << "QC = " << endl
 			<< QA1 << "*" << nA1 << " + " << endl
 			<< QA2 << "*" << nA1 << " + " << endl
 			<< QB1 << "*" << nB1 << " + " << endl
 			<< QC1 << "*" << nC1 << " + " << endl
 			<< QD1 << "*" << nD1 << " = " << endl
-			<< tmp_QC << endl << endl;
+			<< tmp_QC << endl << endl;*/
 
+		Log->Text += "["+i+"]: " + tmp_QC + "\r\n";
 		vQCalculated.push_back(tmp_QC);
 	}
 
+	Log->Text += "--------------\r\n";
 	cout << "Finished Copmutations..." << endl << endl;
-}
-static double c_QC() {
-	return
-		(QA1 * nA1) +
-		(QA2 * nA2) +
-		(QB1 * nB1) +
-		(QC1 * nC1) +
-		(QD1 * nD1);
-}
-static void computeQCalculated() {
-	//Get values for h
-	//hA = c_hA();
-	//hB = c_hB();
-	//hC = c_hC();
-	//hD = c_hD();
-
-	//get the height of the tanks
-	//HA = c_HA();
-	//HB = c_HB();
-	//HC = c_HC();
-	//HD = c_HD();
-
-	//the Multipliers
-	//nA1 = c_nA1();
-	//nA2 = c_nA2();
-	//nB1 = c_nB1();
-	//nC1 = c_nC1();
-	//nD1 = c_nD1();
-
-	//Compute QC
-	QComp = c_QC();
 }

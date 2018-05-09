@@ -9,6 +9,7 @@
 #include <vector>	//Vectors
 #include "form_menu.h"
 
+
 using namespace std;
 
 //Function Prototypes
@@ -25,6 +26,8 @@ static double QComp, QC_ave;
 static vector<double> vQCalculated;
 static double QObs, QO_ave;
 static vector<double> vQObserved;
+//OEF
+static double OEFv;
 
 //RainFall mm³/day
 static double RFall;
@@ -202,12 +205,13 @@ static void showResults() {
 }
 //Show the Values to Log textbox
 static void getFromFile(System::Windows::Forms::TextBox^ Log) {
+	
+	std::cout << setprecision(2);
 	Log->Text = "";
-	Log->Text += "Drainage Area: " + DA_mm + "\n";
-	Log->Text += "Tank Height: " + TankHeight + "\n";
-	Log->Text += "Precipitation \t\t QObserved\n";
+	Log->Text += "Drainage Area: " + DA_mm + "\r\n";
+	Log->Text += "Precipitation | QObserved\r\n";
 	for (int i = 0; i < vPrecipitation.size() && i < vQObserved.size(); i++) {
-		Log->Text += vPrecipitation.at(i) + "\t" + vQObserved.at(i) + "\n";
+		Log->Text += vPrecipitation.at(i)  + " \t\t| " + vQObserved.at(i) + "\r\n";
 	}
 }
 static void line(double db) {

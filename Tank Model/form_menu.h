@@ -5,7 +5,10 @@
 #include <msclr\marshal_cppstd.h> //convert string^ to string
 #include "Functions.h"
 #include "Model.h"
+#include "Compute.h"
+#include "OEF.h"	
 
+#define NL "\r\n"
 
 namespace TankModel {
 
@@ -22,6 +25,8 @@ namespace TankModel {
 	string mae = "Mean Absolute Error, MAE";
 	string r =   "Correlation Coefficient, R";
 	string r2 = "Coefficient of determination, R2";
+
+	static int method;
 
 	/// <summary>
 	/// Summary for form_menu
@@ -91,6 +96,7 @@ namespace TankModel {
 				this->pic_oef = (gcnew System::Windows::Forms::PictureBox());
 				this->uploadFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
 				this->Log = (gcnew System::Windows::Forms::TextBox());
+				this->Log->ScrollBars = ScrollBars::Vertical;
 				(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pic_oef))->BeginInit();
 				this->SuspendLayout();
 				// 
@@ -99,7 +105,7 @@ namespace TankModel {
 				this->btn_reset->BackColor = System::Drawing::Color::LightBlue;
 				this->btn_reset->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(0)));
-				this->btn_reset->Location = System::Drawing::Point(389, 322);
+				this->btn_reset->Location = System::Drawing::Point(6, 385);
 				this->btn_reset->Name = L"btn_reset";
 				this->btn_reset->Size = System::Drawing::Size(90, 41);
 				this->btn_reset->TabIndex = 0;
@@ -125,7 +131,7 @@ namespace TankModel {
 				// 
 				this->btn_display->Font = (gcnew System::Drawing::Font(L"Times New Roman", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(0)));
-				this->btn_display->Location = System::Drawing::Point(115, 267);
+				this->btn_display->Location = System::Drawing::Point(12, 214);
 				this->btn_display->Name = L"btn_display";
 				this->btn_display->Size = System::Drawing::Size(153, 62);
 				this->btn_display->TabIndex = 4;
@@ -213,11 +219,11 @@ namespace TankModel {
 				// 
 				// Log
 				// 
-				this->Log->Location = System::Drawing::Point(495, 84);
+				this->Log->Location = System::Drawing::Point(495, 53);
 				this->Log->Multiline = true;
 				this->Log->Name = L"Log";
 				this->Log->ReadOnly = true;
-				this->Log->Size = System::Drawing::Size(298, 279);
+				this->Log->Size = System::Drawing::Size(404, 373);
 				this->Log->TabIndex = 13;
 				// 
 				// form_menu
@@ -226,7 +232,7 @@ namespace TankModel {
 				this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 				this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 				this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-				this->ClientSize = System::Drawing::Size(805, 375);
+				this->ClientSize = System::Drawing::Size(911, 438);
 				this->Controls->Add(this->Log);
 				this->Controls->Add(this->pic_oef);
 				this->Controls->Add(this->cbx_oef);
@@ -249,6 +255,7 @@ namespace TankModel {
 			
 			private: System::Void form_menu_Load(System::Object^  sender, System::EventArgs^  e) {
 				this->pic_oef->Visible = false;
+				
 			}
 			
 			private: System::Void show_formula(System::Object^  sender, System::EventArgs^  e) {
@@ -281,6 +288,15 @@ namespace TankModel {
 
 					//Initialize Tank heights here too
 					init_Heights(QO_ave);
+					//
+					this->Log->Text += "-------------" + NL;
+					this->Log->Text += "Tank Height: " + TankHeight + NL;
+					this->Log->Text += "YA1: " + YA1 + NL;
+					this->Log->Text += "YA2: " + YA2 + NL;
+					this->Log->Text += "YB1: " + YB1 + NL;
+					this->Log->Text += "YC1: " + YC1 + NL;
+					this->Log->Text += "YD1: " + YD1 + NL;
+					this->Log->Text += "-------------" + NL;
 		
 					//Show Dialog of FilePath
 					/*
@@ -310,7 +326,7 @@ namespace TankModel {
 			private: System::Void btn_optimize_Click(System::Object^  sender, System::EventArgs^  e) {
 				//VALIDATIONS
 				//Check if EOF is chosen
-				int method;
+				
 				if (this->cbx_oef->Text == "Root Squared Mean Error, RMSE") {
 					method = 1;
 				} else if (this->cbx_oef->Text == "Correlation Coefficient, R") {
@@ -326,11 +342,30 @@ namespace TankModel {
 					MessageBox::Show("Please text file", "Error:");
 					return; }
 				//---
-
+				compute(this->Log);
+				switch(method) {
+					case 1:
+						OEFv = RMSE(vQCalculated, vQObserved);
+						this->Log->Text += "OEF | RMSE: " + OEFv;
+						break;
+					case 2:
+						OEFv = COEFFCORREL(vQCalculated, vQObserved);
+						this->Log->Text += "OEF | R: " + OEFv;
+						break;
+					case 3:
+						OEFv = MAE(vQCalculated, vQObserved);
+						this->Log->Text += "OEF | MAE: " + OEFv;
+						break;
+				}
 			}
 
 			private: System::Void btn_display_Click(System::Object^  sender, System::EventArgs^  e) {
-				
+				if (save_file(method)) {
+					MessageBox::Show("File Saved: Model.txt", "Success!");
+				}
+				else {
+					MessageBox::Show("Unable to Save File!", "Error!");
+				}
 			}
 	};
 }

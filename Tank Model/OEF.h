@@ -9,16 +9,16 @@ static double stdev(vector<double>);
 static vector<double> operator-(vector<double>, double);
 static vector<double> operator*(vector<double>, vector<double>);
 
-using namespace std;
+//Add R2
 
 //Correlation Function
-static double coeffcorrel(vector<double> QC, vector<double> QO)
+static double COEFFCORREL(vector<double> QC, vector<double> QO)
 {
 	return sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO));
 }
 
 //MAE
-static double mae(vector<double> QC, vector <double> QO) {
+static double MAE(vector<double> QC, vector <double> QO) {
 	double suma;
 	int N = QC.size();
 	for (unsigned i = 0; i < N; i++) {
@@ -29,7 +29,7 @@ static double mae(vector<double> QC, vector <double> QO) {
 }
 
 //RMSE
-static double rmse(vector <double> QC, vector <double> QO) {
+static double RMSE(vector <double> QC, vector <double> QO) {
 	double suma;
 	int N = QC.size();
 	for (unsigned i = 0; i < N; i++) {
@@ -38,6 +38,10 @@ static double rmse(vector <double> QC, vector <double> QO) {
 	double rmse = sqrt(suma / N);
 	return rmse;
 }
+
+
+
+
 
 //--These are all for Coeffcorrel
 static double mean(vector<double> a)
