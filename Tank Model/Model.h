@@ -15,7 +15,7 @@ using namespace std;
 //Function Prototypes
 static void init_Qs(double);
 static void init_Heights(double);
-static double random();
+static double random(double, double);
 static void line(double);
 static void line(string, double);
 static void line(string);
@@ -79,6 +79,7 @@ static double nA1, nA2, nB1, nC1, nD1;
 //---------------------------
 //Init Qs Depending on QO | This uses percentage
 static void init_Heights(double QOAve) {
+	
 	init_Qs(QOAve);
 	
 	YA1 = 0;
@@ -93,28 +94,28 @@ static void init_Heights(double QOAve) {
 //Init Qs Depending on QO | This uses percentage
 static void init_Qs(double QO) {
 
-	QA1 = QO * .48;
+	QA1 = QO * random(.53, .48);
 	line("QA1: ", QA1);
 
-	QA2 = QO * .33;
+	QA2 = QO * random(.36, .33);
 	line("QA2: ", QA2);
 
-	QA0 = QO * .17;
+	QA0 = QO * random(.20, .17);
 	line("QA0: ", QA0);
 
-	QB1 = QO * .9;
+	QB1 = QO * random(.12, .9);
 	line("QB1: ", QB1);
 
-	QB0 = QO * .6;
+	QB0 = QO * random(.09, .06);
 	line("QB0: ", QB0);
 
-	QC1 = QO * .3;
+	QC1 = QO * random(.06, .03);
 	line("QC1: ", QC1);
 
-	QC0 = QO * .2;
+	QC0 = QO * random(.05, .02);
 	line("QC0: ", QC0);
 
-	QD1 = QO * .1;
+	QD1 = QO * random(.03, .01);
 	line("QD1: ", QD1);
 	cout << endl;
 
@@ -158,9 +159,9 @@ static void resetValues() {
 }
 
 //generate randome
-static double random() {
-	n = rand();
-	return n;
+double random(double max, double min)
+{
+	return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
 }
 //Printing Functions
 static void showResults() {
@@ -209,11 +210,12 @@ static void getFromFile(System::Windows::Forms::TextBox^ Log) {
 	std::cout << setprecision(2);
 	Log->Text = "";
 	Log->Text += "Drainage Area: " + DA_mm + "\r\n";
-	Log->Text += "Precipitation | QObserved\r\n";
+	Log->Text += "Precipitation \t|\tQObserved\r\n";
 	for (int i = 0; i < vPrecipitation.size() && i < vQObserved.size(); i++) {
-		Log->Text += vPrecipitation.at(i)  + " \t\t| " + vQObserved.at(i) + "\r\n";
+		Log->Text += vPrecipitation.at(i)  + " \t\t|\t" + vQObserved.at(i) + "\r\n";
 	}
 }
+
 static void line(double db) {
 	cout << db << "\n";
 }

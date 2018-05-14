@@ -302,9 +302,8 @@ namespace TankModel {
 				}
 				catch (Exception ^ex)
 				{
-					MessageBox::Show("Error accessing resources!", ex->Message);
+					MessageBox::Show(ex->Message, "Error accessing resources!");
 				}
-				
 			}
 			
 			private: System::Void btn_upload_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -324,14 +323,14 @@ namespace TankModel {
 					//Initialize Tank heights here too
 					init_Heights(QO_ave);
 					//
-					this->Log->Text += "-------------" + NL;
+					/*this->Log->Text += "-------------" + NL;
 					this->Log->Text += "Tank Height: " + TankHeight + NL;
 					this->Log->Text += "YA1: " + YA1 + NL;
 					this->Log->Text += "YA2: " + YA2 + NL;
 					this->Log->Text += "YB1: " + YB1 + NL;
 					this->Log->Text += "YC1: " + YC1 + NL;
 					this->Log->Text += "YD1: " + YD1 + NL;
-					this->Log->Text += "-------------" + NL;
+					this->Log->Text += "-------------" + NL;*/
 		
 					//Show Dialog of FilePath
 					/*
@@ -341,34 +340,23 @@ namespace TankModel {
 					*/
 
 					//Show Dialog of A,TA,P,QO
-					MessageBox::Show("File Read", "Success:");	
+					MessageBox::Show("File Read", "Success");	
 				}
 
 			}
 			
-			private: System::Void btn_reset_Click(System::Object^  sender, System::EventArgs^  e) {
-				String ^managed;
-				resetValues();
-				if (vPrecipitation.empty()) {
-					this->Log->Text = "";
-					MessageBox::Show("Values Cleared", "Success:");
-				}
-				else {
-					MessageBox::Show("Can't Clear Values", "Error:");
-				}
-			}
-			
 			private: System::Void btn_optimize_Click(System::Object^  sender, System::EventArgs^  e) {
-				//VALIDATIONS
-				//Check if EOF is chosen
-				
+				//VALIDATIONS || Check if EOF is chosen
 				if (this->cbx_oef->Text == "Root Squared Mean Error, RMSE") {
 					method = 1;
 				} else if (this->cbx_oef->Text == "Correlation Coefficient, R") {
 					method = 2;
 				} else if (this->cbx_oef->Text == "Mean Absolute Error, MAE") {
 					method = 3;
-				} else {
+				} else if (this->cbx_oef->Text == "Coefficient of determination, R2") {
+					method = 4;
+				}
+				else {
 					MessageBox::Show("Please Select OEF", "Error:");
 					return;
 				}
@@ -377,6 +365,15 @@ namespace TankModel {
 					MessageBox::Show("Please text file", "Error:");
 					return; }
 				//---
+
+				this->Log->Text += "-------------" + NL;
+				this->Log->Text += "Tank Height: " + TankHeight + NL;
+				this->Log->Text += "YA1: " + YA1 + NL;
+				this->Log->Text += "YA2: " + YA2 + NL;
+				this->Log->Text += "YB1: " + YB1 + NL;
+				this->Log->Text += "YC1: " + YC1 + NL;
+				this->Log->Text += "YD1: " + YD1 + NL;
+				this->Log->Text += "-------------" + NL;
 				compute(this->Log);
 				switch(method) {
 					case 1:
@@ -391,6 +388,10 @@ namespace TankModel {
 						OEFv = MAE(vQCalculated, vQObserved);
 						this->Log->Text += "OEF | MAE: " + OEFv;
 						break;
+					case 4:
+						OEFv = R2(vQCalculated, vQObserved);
+						this->Log->Text += "OEF | R2: " + OEFv;
+						break;
 				}
 			}
 
@@ -400,6 +401,18 @@ namespace TankModel {
 				}
 				else {
 					MessageBox::Show("Unable to Save File!", "Error!");
+				}
+			}
+
+			private: System::Void btn_reset_Click(System::Object^  sender, System::EventArgs^  e) {
+				String ^managed;
+				resetValues();
+				if (vPrecipitation.empty()) {
+					this->Log->Text = "";
+					MessageBox::Show("Values Cleared", "Success:");
+				}
+				else {
+					MessageBox::Show("Can't Clear Values", "Error:");
 				}
 			}
 			

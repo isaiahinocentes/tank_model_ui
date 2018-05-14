@@ -43,6 +43,7 @@ static void read_file_init(string path) {
 	QO_ave = ave_QO();
 	Prec_ave = ave_Prec();
 }
+
 static boolean file_tank_config(string path) {
 
 	try
