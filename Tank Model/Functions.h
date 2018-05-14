@@ -7,6 +7,9 @@
 #include "Model.h"	//Tank Model Variables	
 #include "form_menu.h"
 #include "Compute.h" //Computations and Conversions
+//For removing string characters
+#include <iterator>
+#include <algorithm>
 
 using namespace std;
 
@@ -22,6 +25,7 @@ static void read_file_init(string path) {
 
 	//Set the Drainage Area to mm units
 	file >> str;
+	
 	DA_km = atof(str.c_str());
 	//Conver km² to mm²
 	DA_mm = km2mm(DA_km);
@@ -34,6 +38,7 @@ static void read_file_init(string path) {
 
 		//Read QObserved
 		file >> str;
+		remove_copy(str.begin(), str.end(), back_inserter(str), ',');
 		vQObserved.push_back(lps2mmd(atof(str.c_str())));
 		
 		row++;

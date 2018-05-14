@@ -119,33 +119,49 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 }
 static double predictQC(double prec) {
 	double QC = 0;
+	double tmp = 0;
 	/*
 	10 - 5 | 5
 	5 - 4 | 1
 	*/
+	
+	if (prec == 0) return 0;
+	if (prec < YA2) {
+		return prec;	} 
 
-	prec -= YA1;
-	if (prec > 0) {
-		QC += YA1;
+	//
+
+	if ((prec - YA2) > 0) {
+		QC += YA2; 
+	} else {
+		QC += prec;
+		return QC;
 	}
 
-	prec -= YA2;
-	if (prec > 0) {
-		QC += YA2;
-	}
-
-	prec -= YB1;
-	if (prec > 0) {
+	if ((prec - YB1) > 0) {
 		QC += YB1;
 	}
-	prec -= YC1;
-	if (prec > 0) {
+	else {
+		QC += prec;
+		return QC;
+	}
+
+	if ((prec - YC1) > 0) {
 		QC += YC1;
 	}
-	prec -= YD1;
-	if (prec > 0) {
+	else {
+		QC += prec;
+		return QC;
+	}
+
+	if ((prec - YD1) > 0) {
 		QC += YD1;
 	}
+	else {
+		QC += prec;
+		return QC;
+	}
+
 
 	if(prec > 0)
 		QC += prec;

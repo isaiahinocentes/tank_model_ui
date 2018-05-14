@@ -137,19 +137,21 @@ namespace TankModel {
 				// 
 				// btn_display
 				// 
+				this->btn_display->Enabled = false;
 				this->btn_display->Font = (gcnew System::Drawing::Font(L"Times New Roman", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(0)));
-				this->btn_display->Location = System::Drawing::Point(12, 214);
+				this->btn_display->Location = System::Drawing::Point(177, 214);
 				this->btn_display->Name = L"btn_display";
 				this->btn_display->Size = System::Drawing::Size(153, 62);
 				this->btn_display->TabIndex = 4;
-				this->btn_display->Text = L"Display Results";
+				this->btn_display->Text = L"Save Results";
 				this->btn_display->UseVisualStyleBackColor = true;
 				this->btn_display->Click += gcnew System::EventHandler(this, &form_menu::btn_display_Click);
 				// 
 				// btn_optimize
 				// 
 				this->btn_optimize->BackColor = System::Drawing::Color::MediumOrchid;
+				this->btn_optimize->Enabled = false;
 				this->btn_optimize->Font = (gcnew System::Drawing::Font(L"Times New Roman", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(0)));
 				this->btn_optimize->Location = System::Drawing::Point(12, 160);
@@ -340,7 +342,8 @@ namespace TankModel {
 					*/
 
 					//Show Dialog of A,TA,P,QO
-					MessageBox::Show("File Read", "Success");	
+					MessageBox::Show("File Read", "Success");
+					btn_optimize->Enabled = true;
 				}
 
 			}
@@ -393,6 +396,7 @@ namespace TankModel {
 						this->Log->Text += "OEF | R2: " + OEFv;
 						break;
 				}
+				btn_display->Enabled = true;
 			}
 
 			private: System::Void btn_display_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -410,6 +414,8 @@ namespace TankModel {
 				if (vPrecipitation.empty()) {
 					this->Log->Text = "";
 					MessageBox::Show("Values Cleared", "Success:");
+					btn_optimize->Enabled = false;
+					btn_optimize->Enabled = false;
 				}
 				else {
 					MessageBox::Show("Can't Clear Values", "Error:");

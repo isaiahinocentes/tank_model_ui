@@ -91,31 +91,32 @@ static void init_Heights(double QOAve) {
 	TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
 }
 
+static double ERROR_MARGIN = 0.05;
 //Init Qs Depending on QO | This uses percentage
 static void init_Qs(double QO) {
 
-	QA1 = QO * random(.53, .48);
+	QA1 = QO * random(.48 + ERROR_MARGIN, .48);
 	line("QA1: ", QA1);
 
-	QA2 = QO * random(.36, .33);
+	QA2 = QO * random(.33 + ERROR_MARGIN, .33);
 	line("QA2: ", QA2);
 
-	QA0 = QO * random(.20, .17);
+	QA0 = QO * random(.17 + ERROR_MARGIN, .17);
 	line("QA0: ", QA0);
 
-	QB1 = QO * random(.12, .9);
+	QB1 = QO * random(.09 + ERROR_MARGIN, .09);
 	line("QB1: ", QB1);
 
-	QB0 = QO * random(.09, .06);
+	QB0 = QO * random(.06 + ERROR_MARGIN, .06);
 	line("QB0: ", QB0);
 
-	QC1 = QO * random(.06, .03);
+	QC1 = QO * random(.03 + ERROR_MARGIN, .03);
 	line("QC1: ", QC1);
 
-	QC0 = QO * random(.05, .02);
+	QC0 = QO * random(.02 + ERROR_MARGIN, .02);
 	line("QC0: ", QC0);
 
-	QD1 = QO * random(.03, .01);
+	QD1 = QO * random(.01 + ERROR_MARGIN, .01);
 	line("QD1: ", QD1);
 	cout << endl;
 
