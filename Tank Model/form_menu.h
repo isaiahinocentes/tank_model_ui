@@ -69,6 +69,9 @@ namespace TankModel {
 
 		private: System::Windows::Forms::OpenFileDialog^  uploadFileDialog;
 		private: System::Windows::Forms::TextBox^  Log;
+	private: System::Windows::Forms::Button^  btn_predict;
+
+
 
 
 
@@ -96,7 +99,7 @@ namespace TankModel {
 				this->pic_oef = (gcnew System::Windows::Forms::PictureBox());
 				this->uploadFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
 				this->Log = (gcnew System::Windows::Forms::TextBox());
-				this->Log->ScrollBars = ScrollBars::Vertical;
+				this->btn_predict = (gcnew System::Windows::Forms::Button());
 				(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pic_oef))->BeginInit();
 				this->SuspendLayout();
 				// 
@@ -105,9 +108,9 @@ namespace TankModel {
 				this->btn_reset->BackColor = System::Drawing::Color::LightBlue;
 				this->btn_reset->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(0)));
-				this->btn_reset->Location = System::Drawing::Point(6, 385);
+				this->btn_reset->Location = System::Drawing::Point(6, 364);
 				this->btn_reset->Name = L"btn_reset";
-				this->btn_reset->Size = System::Drawing::Size(90, 41);
+				this->btn_reset->Size = System::Drawing::Size(103, 62);
 				this->btn_reset->TabIndex = 0;
 				this->btn_reset->Text = L"RESET";
 				this->btn_reset->UseVisualStyleBackColor = false;
@@ -207,7 +210,7 @@ namespace TankModel {
 				// 
 				this->pic_oef->Location = System::Drawing::Point(115, 135);
 				this->pic_oef->Name = L"pic_oef";
-				this->pic_oef->Size = System::Drawing::Size(201, 73);
+				this->pic_oef->Size = System::Drawing::Size(186, 73);
 				this->pic_oef->TabIndex = 11;
 				this->pic_oef->TabStop = false;
 				this->pic_oef->MouseHover += gcnew System::EventHandler(this, &form_menu::show_formula);
@@ -223,8 +226,22 @@ namespace TankModel {
 				this->Log->Multiline = true;
 				this->Log->Name = L"Log";
 				this->Log->ReadOnly = true;
+				this->Log->ScrollBars = System::Windows::Forms::ScrollBars::Both;
 				this->Log->Size = System::Drawing::Size(404, 373);
 				this->Log->TabIndex = 13;
+				// 
+				// btn_predict
+				// 
+				this->btn_predict->BackColor = System::Drawing::Color::YellowGreen;
+				this->btn_predict->Font = (gcnew System::Drawing::Font(L"Times New Roman", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+					static_cast<System::Byte>(0)));
+				this->btn_predict->Location = System::Drawing::Point(330, 364);
+				this->btn_predict->Name = L"btn_predict";
+				this->btn_predict->Size = System::Drawing::Size(159, 61);
+				this->btn_predict->TabIndex = 14;
+				this->btn_predict->Text = L"Predict QC";
+				this->btn_predict->UseVisualStyleBackColor = false;
+				this->btn_predict->Click += gcnew System::EventHandler(this, &form_menu::btn_predict_Click);
 				// 
 				// form_menu
 				// 
@@ -233,6 +250,7 @@ namespace TankModel {
 				this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 				this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 				this->ClientSize = System::Drawing::Size(911, 438);
+				this->Controls->Add(this->btn_predict);
 				this->Controls->Add(this->Log);
 				this->Controls->Add(this->pic_oef);
 				this->Controls->Add(this->cbx_oef);
@@ -274,10 +292,10 @@ namespace TankModel {
 			
 			private: System::Void btn_upload_Click(System::Object^  sender, System::EventArgs^  e) {
 	
-			// Displays an OpenFileDialog so the user can select a Cursor.  
-			OpenFileDialog ^openFileDialog1 = gcnew OpenFileDialog();
-			openFileDialog1->Filter = "Text Files|*.txt";
-			openFileDialog1->Title = "Select a Text File";
+				// Displays an OpenFileDialog so the user can select a Cursor.  
+				OpenFileDialog ^openFileDialog1 = gcnew OpenFileDialog();
+				openFileDialog1->Filter = "Text Files|*.txt";
+				openFileDialog1->Title = "Select a Text File";
 
 				if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 				{
@@ -365,6 +383,57 @@ namespace TankModel {
 				}
 				else {
 					MessageBox::Show("Unable to Save File!", "Error!");
+				}
+			}
+			
+			private: System::Void btn_predict_Click(System::Object^  sender, System::EventArgs^  e) {
+				// Displays an OpenFileDialog so the user can select a Cursor.  
+				OpenFileDialog ^openFileDialog1 = gcnew OpenFileDialog();
+				openFileDialog1->Filter = "Text Files|*.txt";
+				openFileDialog1->Title = "Select a Text File with Tank Configuration";
+
+				if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+				{
+					string path = marshal_as<string>(openFileDialog1->FileName);
+					//Read file and Initialize Drainage Area, Tank Height, P and QO Series
+					
+					file_tank_config(path);
+					//getFromFile(this->Log);
+					this->Log->Text = "---Predicting Rainfall---\r\n";
+					this->Log->Text += "Tank Height: " + TankHeight + NL;
+					this->Log->Text += "YA1: " + YA1 + NL;
+					this->Log->Text += "YA2: " + YA2 + NL;
+					this->Log->Text += "YB1: " + YB1 + NL;
+					this->Log->Text += "YC1: " + YC1 + NL;
+					this->Log->Text += "YD1: " + YD1 + NL;
+					
+					//Open Precipitation Files
+					openFileDialog1->Filter = "Text Files|*.txt";
+					openFileDialog1->Title = "Select a Text File with Precipitations";
+					if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+
+						string path = marshal_as<string>(openFileDialog1->FileName);
+						read_prec(path);
+
+						//this->Log->Text += "Precipitations:" + NL;
+
+						//Clear QC
+						vQCalculated.clear();
+						for each (double prec in vPrecipitation) {
+							vQCalculated.push_back(predictQC(prec));
+							//this->Log->Text += NL;
+						}
+
+						this->Log->Text += "-------------" + NL;
+						this->Log->Text += "Precipitation \t QCs" + NL;
+						for (int i = 0; i < vQCalculated.size(); i++) {
+							this->Log->Text += vPrecipitation.at(i)
+								+ "\t" + vQCalculated.at(i) + NL;
+						}
+
+						MessageBox::Show("File Read", "Success Predict");
+					}
+					
 				}
 			}
 	};

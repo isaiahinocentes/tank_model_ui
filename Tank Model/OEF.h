@@ -9,15 +9,18 @@ static double stdev(vector<double>);
 static vector<double> operator-(vector<double>, double);
 static vector<double> operator*(vector<double>, vector<double>);
 
-//Add R2
 
-//Correlation Function
+//Add R2 | Range 0 - 1.0 | optimal 1
+static double R2(vector<double> QC, vector<double> QO)
+{
+	return pow(sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO)),2);
+}
+//Correlation Function | Range -1.0 - 1.0 | optimal -1 or 1
 static double COEFFCORREL(vector<double> QC, vector<double> QO)
 {
 	return sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO));
 }
-
-//MAE
+//MAE | range 0.0 - inf | optimal 0.0
 static double MAE(vector<double> QC, vector <double> QO) {
 	double suma;
 	int N = QC.size();
@@ -27,8 +30,7 @@ static double MAE(vector<double> QC, vector <double> QO) {
 	double MAE = suma / N;
 	return MAE;
 }
-
-//RMSE
+//RMSE | range 0 - inf | 0.0
 static double RMSE(vector <double> QC, vector <double> QO) {
 	double suma;
 	int N = QC.size();
@@ -38,10 +40,6 @@ static double RMSE(vector <double> QC, vector <double> QO) {
 	double rmse = sqrt(suma / N);
 	return rmse;
 }
-
-
-
-
 
 //--These are all for Coeffcorrel
 static double mean(vector<double> a)

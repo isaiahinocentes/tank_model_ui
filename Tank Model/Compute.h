@@ -117,3 +117,38 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 	Log->Text += "--------------\r\n";
 	cout << "Finished Copmutations..." << endl << endl;
 }
+static double predictQC(double prec) {
+	double QC = 0;
+	/*
+	10 - 5 | 5
+	5 - 4 | 1
+	*/
+
+	prec -= YA1;
+	if (prec > 0) {
+		QC += YA1;
+	}
+
+	prec -= YA2;
+	if (prec > 0) {
+		QC += YA2;
+	}
+
+	prec -= YB1;
+	if (prec > 0) {
+		QC += YB1;
+	}
+	prec -= YC1;
+	if (prec > 0) {
+		QC += YC1;
+	}
+	prec -= YD1;
+	if (prec > 0) {
+		QC += YD1;
+	}
+
+	if(prec > 0)
+		QC += prec;
+
+	return QC;
+}

@@ -43,9 +43,69 @@ static void read_file_init(string path) {
 	QO_ave = ave_QO();
 	Prec_ave = ave_Prec();
 }
+static boolean file_tank_config(string path) {
+
+	try
+	{
+		ifstream file(path);
+		if (file.fail()) {
+
+		}
+
+		string str;
+		file >> str;
+		YA1 = atof(str.c_str());
+		file >> str;
+		YA2 = atof(str.c_str());
+		file >> str;
+		YB1 = atof(str.c_str());
+		file >> str;
+		YC1 = atof(str.c_str());
+		file >> str;
+		YD1 = atof(str.c_str());
+
+		TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
+		
+		return true;
+	}
+	catch (const std::exception&)
+	{
+
+	}
+	return false;
+}
+
+static boolean read_prec(string path) {
+	
+	try
+	{
+		ifstream file(path);
+		if (file.fail()) {
+
+		}
+
+		int row = 0;
+		string str;
+
+		vPrecipitation.clear();
+		
+		//read Ps
+		while (!file.eof()) {
+			//Read Precipitation
+			file >> str;
+			vPrecipitation.push_back(atof(str.c_str()));
+		}
+		return true;
+	}
+	catch (const std::exception&)
+	{
+		
+	}
+	return false;
+}
 
 static boolean save_file(int method) {
-	cout << endl << "_______ Saving File ________" << endl;
+	//cout << endl << "_______ Saving File ________" << endl;
 	//Change this with current time
 	srand(time(NULL));
 
@@ -53,7 +113,7 @@ static boolean save_file(int method) {
 	//strcat(filepath, filepath);
 	//filepath += filepath + ".txt";
 
-	cout << "Filepath: " << filepath << endl;
+	//cout << "Filepath: " << filepath << endl;
 
 	ofstream file(filepath);
 
@@ -64,24 +124,29 @@ static boolean save_file(int method) {
 		file << setprecision(10);
 
 		//Save Tank Height
-		file << "TankHeight:" << TankHeight << endl;
+		//file << "TankHeight:" << TankHeight << endl;
 
 		//Save Ys = Height of Orifices
-		file << "YA1:" << YA1 << endl;
+		/*file << "YA1:" << YA1 << endl;
 		file << "YA2:" << YA2 << endl;
 		file << "YB1:" << YB1 << endl;
 		file << "YC1:" << YC1 << endl;
-		file << "YD1:" << YD1 << endl;
+		file << "YD1:" << YD1 << endl;*/
+		file << YA1 << endl;
+		file << YA2 << endl;
+		file << YB1 << endl;
+		file << YC1 << endl;
+		file << YD1 << endl;
 
 		if (method == 1) {
-			file << "Root Squared Mean Error (RMSE): " << OEFv << endl;
+			//file << "Root Squared Mean Error (RMSE): " << OEFv << endl;
 		}
 		else if (method == 2) {
 			//Coeff
-			file << "Coefficient Correlation (R): " << OEFv << endl;
+			//file << "Coefficient Correlation (R): " << OEFv << endl;
 		}
 		else if (method == 3) {
-			file << "Mean Absolute Error (MAE): " << OEFv << endl;
+			//file << "Mean Absolute Error (MAE): " << OEFv << endl;
 		}
 		//Save Qs
 		/*file << "QA1:" << QA1 << endl;
