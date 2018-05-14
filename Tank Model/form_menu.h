@@ -20,6 +20,8 @@ namespace TankModel {
 	using namespace System::Drawing;
 	using namespace std;
 	using namespace msclr::interop;
+	using namespace System::IO;
+	using namespace System::Reflection;
 
 	string rmse ="Root Squared Mean Error, RMSE";
 	string mae = "Mean Absolute Error, MAE";
@@ -69,7 +71,10 @@ namespace TankModel {
 
 		private: System::Windows::Forms::OpenFileDialog^  uploadFileDialog;
 		private: System::Windows::Forms::TextBox^  Log;
-	private: System::Windows::Forms::Button^  btn_predict;
+		private: System::Windows::Forms::Button^  btn_predict;
+
+		private: Assembly ^_assembly;
+		private: Stream ^_imageStream;
 
 
 
@@ -278,16 +283,28 @@ namespace TankModel {
 			
 			private: System::Void show_formula(System::Object^  sender, System::EventArgs^  e) {
 				this->pic_oef->Visible = true;
-
-				if (this->cbx_oef->SelectedText == "Root Squared Mean Error, RMSE") {
-					this->pic_oef->ImageLocation = "..\\..\\..\\..\\Dropbox\\Freelance - Gab\\Images\\oef_rmse.PNG";
+				try
+				{
+					String ^path;
+					//_assembly = Assembly::GetExecutingAssembly();
+					if (this->cbx_oef->SelectedText == "Root Squared Mean Error, RMSE") {
+						path = ".\\img\\oef_rmse.bmp";
+					}
+					else if (this->cbx_oef->SelectedText == "Correlation Coefficient, R") {
+						path = ".\\img\\oef_coeff.bmp";
+					}
+					else if (this->cbx_oef->SelectedText == "Mean Absolute Error, MAE") {
+						path = ".\\img\\oef_mae.bmp";
+					}
+					//_imageStream = _assembly->GetManifestResourceStream(path);
+					//this->pic_oef->Image = gcnew Bitmap(_imageStream);
+					this->pic_oef->ImageLocation = path;
 				}
-				else if (this->cbx_oef->SelectedText == "Correlation Coefficient, R") {
-					this->pic_oef->ImageLocation = "..\\..\\..\\..\\Dropbox\\Freelance - Gab\\Images\\oef_r.PNG";
+				catch (Exception ^ex)
+				{
+					MessageBox::Show("Error accessing resources!", ex->Message);
 				}
-				else if (this->cbx_oef->SelectedText == "Mean Absolute Error, MAE") {
-					this->pic_oef->ImageLocation = "..\\..\\..\\..\\Dropbox\\Freelance - Gab\\Images\\oef_mae.PNG";
-				}
+				
 			}
 			
 			private: System::Void btn_upload_Click(System::Object^  sender, System::EventArgs^  e) {

@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resource Files\img">
-      <UniqueIdentifier>{7dbefe08-ed40-44b3-b780-e20be1838f66}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="form_menu.cpp">
@@ -51,14 +48,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Dropbox\Freelance - Gab\Images\oef_mae.PNG">
-      <Filter>Resource Files\img</Filter>
+    <Image Include="..\..\..\..\Pictures\oef_mae.bmp">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\Dropbox\Freelance - Gab\Images\oef_r.PNG">
-      <Filter>Resource Files\img</Filter>
+    <Image Include="..\..\..\..\Pictures\oef_rmse.bmp">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\Dropbox\Freelance - Gab\Images\oef_rmse.PNG">
-      <Filter>Resource Files\img</Filter>
+    <Image Include="..\..\..\..\Pictures\oef_coeff.bmp">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>
