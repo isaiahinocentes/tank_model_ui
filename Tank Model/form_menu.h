@@ -323,7 +323,7 @@ namespace TankModel {
 					getFromFile(this->Log);
 
 					//Initialize Tank heights here too
-					init_Heights(QO_ave);
+					init_Heights(Prec_ave);
 					//
 					/*this->Log->Text += "-------------" + NL;
 					this->Log->Text += "Tank Height: " + TankHeight + NL;

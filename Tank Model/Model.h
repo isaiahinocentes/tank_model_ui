@@ -14,6 +14,7 @@ using namespace std;
 
 //Function Prototypes
 static void init_Qs(double);
+static void init_Qs_Orifice(double);
 static void init_Heights(double);
 static double random(double, double);
 static void line(double);
@@ -78,9 +79,9 @@ static double nA1, nA2, nB1, nC1, nD1;
 
 //---------------------------
 //Init Qs Depending on QO | This uses percentage
-static void init_Heights(double QOAve) {
+static void init_Heights(double base) {
 	
-	init_Qs(QOAve);
+	init_Qs_Orifice(base);
 	
 	YA1 = 0;
 	YA2 = (QA1 + QA2 + QA0) / 3;
@@ -91,7 +92,17 @@ static void init_Heights(double QOAve) {
 	TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
 }
 
-static double ERROR_MARGIN = 0.05;
+static double ERROR_MARGIN = 0.02;
+static double BASE_MARGIN = 0.03;
+//Initialize Smaller Tank Heights
+static void init_Qs_Orifice(double base) {
+	QA1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QA2 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QB1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QC1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QD1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+}
+
 //Init Qs Depending on QO | This uses percentage
 static void init_Qs(double QO) {
 
