@@ -435,7 +435,7 @@ namespace TankModel {
 					
 					file_tank_config(path);
 					//getFromFile(this->Log);
-					this->Log->Text = "----Predicting Rainfall----\r\n";
+					this->Log->Text = "----Predicting Discharge (QC)----\r\n";
 					this->Log->Text += "Tank Height: " + TankHeight + NL;
 					this->Log->Text += "YA1: " + YA1 + NL;
 					this->Log->Text += "YA2: " + YA2 + NL;
