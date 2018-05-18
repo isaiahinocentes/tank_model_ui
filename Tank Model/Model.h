@@ -77,7 +77,6 @@ static double YD1;
 //Discharge(Qx) Multipliers | 0 or 1
 static double nA1, nA2, nB1, nC1, nD1;
 
-//---------------------------
 //Init Qs Depending on QO | This uses percentage
 static void init_Heights(double base) {
 	
@@ -107,30 +106,16 @@ static void init_Qs_Orifice(double base) {
 static void init_Qs(double QO) {
 
 	QA1 = QO * random(.48 + ERROR_MARGIN, .48);
-	line("QA1: ", QA1);
-
 	QA2 = QO * random(.33 + ERROR_MARGIN, .33);
-	line("QA2: ", QA2);
-
 	QA0 = QO * random(.17 + ERROR_MARGIN, .17);
-	line("QA0: ", QA0);
 
 	QB1 = QO * random(.09 + ERROR_MARGIN, .09);
-	line("QB1: ", QB1);
-
 	QB0 = QO * random(.06 + ERROR_MARGIN, .06);
-	line("QB0: ", QB0);
 
 	QC1 = QO * random(.03 + ERROR_MARGIN, .03);
-	line("QC1: ", QC1);
-
 	QC0 = QO * random(.02 + ERROR_MARGIN, .02);
-	line("QC0: ", QC0);
 
 	QD1 = QO * random(.01 + ERROR_MARGIN, .01);
-	line("QD1: ", QD1);
-	cout << endl;
-
 }
 
 //Reset Values
@@ -174,47 +159,6 @@ static void resetValues() {
 double random(double max, double min)
 {
 	return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
-}
-//Printing Functions
-static void showResults() {
-
-	cout << "P, E, A | mm/day:" << "\n";
-	cout << "\nPrecipitation: " << Prec << "\n";
-	cout << "Evaporation: " << Evap << "\n";
-	cout << "Drainage Area: " << DA_mm << "\n";
-	cout << "\n";
-	cout << "Discharge (Q) Values | mm/day: " << "\n";
-	cout << "QA1, 2,0: " << QA1 << "\t" << QA2 << "\t" << QA0 << "\n";
-	cout << "QB1, 0: " << QB1 << "\t" << QB0 << "\n";
-	cout << "QC1, 0: " << QC1 << "\t" << QC0 << "\n";
-	cout << "QD1: " << QD1 << "\n";
-	cout << "\n";
-	cout << "Values of Water Levels(h) | mm/day" << "\n";
-	cout << "hA: " << hA << "\n";
-	cout << "hB: " << hB << "\n";
-	cout << "hC: " << hC << "\n";
-	cout << "hD: " << hD << "\n";
-	cout << "\n";
-	cout << "Values of Height(H) | mm[/day]:" << "\n";
-	cout << "HA: " << HA << " \n";
-	cout << "HB: " << HB << " \n";
-	cout << "HC: " << HC << " \n";
-	cout << "HD: " << HD << " \n";
-	cout << "\n";
-	cout << "Height of Orifice (Y) | mm[/day]: " << "\n";
-	cout << "YA1: " << YA1 << " | " << nA1 << "\n";
-	cout << "YA2: " << YA2 << " | " << nA2 << "\n";
-	cout << "YB1: " << YB1 << " | " << nB1 << "\n";
-	cout << "YC1: " << YC1 << " | " << nC1 << "\n";
-	cout << "YD1: " << YD1 << " | " << nD1 << "\n";
-	cout << "\n";
-	cout << "QC | mm[/day]: " << "\n";
-	cout << "QC = QA1 + QA2 + QB1 + QC1 + QD1\n";
-	cout << QA1*nA1 << " + " <<
-		QA2*nA2 << " + " <<
-		QB1*nB1 << " + " <<
-		QC1*nC1 << " + " <<
-		QD1*nD1 << " = " << QComp;
 }
 //Show the Values to Log textbox
 static void getFromFile(System::Windows::Forms::TextBox^ Log) {

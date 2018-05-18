@@ -65,12 +65,26 @@ static void compute_multipliers() {
 //Compute QC
 static void compute(System::Windows::Forms::TextBox^ Log) {
 	
-	int n = vQObserved.size();
+	//File output for QC
+	string optQc = "C:\\Users\\isaia\\Desktop\\optQc.txt";
+	ofstream fQc(optQc);
 	
-	Log->Text += "\r\n" + "----- QCs ----\r\n";
+	//File output for QO
+	string optQo = "C:\\Users\\isaia\\Desktop\\optQo.txt";
+	ofstream fQo(optQo);
 	
-	for (int i = 0; i < n; i++)
-	{
+	if (fQc.bad() || fQo.bad()) {
+		return;
+	}
+
+	fQc << setprecision(10);
+	fQo << setprecision(10);
+
+	Log->Text += "\r\n" + "------------- QCs ----------\r\n";
+	double tmp_QC = 0;
+
+	for (int i = 0; i < vQObserved.size(); i++){
+
 		//Initialize QS using QO
 		init_Qs(vQObserved.at(i));
 
@@ -80,91 +94,122 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 		hC = c_hC(QB0, QC1, QC0);
 		hD = c_hD(QC0, QD1);
 
-		/*cout << "Values for \"h\": " << endl
-			<< "hA:" << setprecision(10) << hA << endl
-			<< "hB:" << setprecision(10) << hB << endl
-			<< "hC:" << setprecision(10) << hC << endl
-			<< "hD:" << setprecision(10) << hD << endl << endl;*/
-
 		compute_multipliers();
 
-		/*cout << "Multipliers [1/0]: " << endl
-			<< "A1:" << nA1 << endl
-			<< "A2:" << nA2 << endl
-			<< "B1:" << nB1 << endl
-			<< "C1:" << nC1 << endl
-			<< "D1:" << nD1 << endl << endl;*/
-
-		double tmp_QC =
+		tmp_QC =
 			(QA1 * nA1) +
 			(QA2 * nA2) +
 			(QB1 * nB1) +
 			(QC1 * nC1) +
 			(QD1 * nD1);
 
-		/*cout << "QC = " << endl
-			<< QA1 << "*" << nA1 << " + " << endl
-			<< QA2 << "*" << nA1 << " + " << endl
-			<< QB1 << "*" << nB1 << " + " << endl
-			<< QC1 << "*" << nC1 << " + " << endl
-			<< QD1 << "*" << nD1 << " = " << endl
-			<< tmp_QC << endl << endl;*/
+		Log->Text += tmp_QC + "\r\n";
+		//vQCalculated.push_back(tmp_QC);
 
-		Log->Text += "["+i+"]: " + tmp_QC + "\r\n";
-		vQCalculated.push_back(tmp_QC);
+		//Save to file QC
+		fQc << tmp_QC << endl;
+		//Save to file QO
+		fQo << vQObserved.at(i) << endl;
 	}
 
-	Log->Text += "--------------\r\n";
-	cout << "Finished Copmutations..." << endl << endl;
-}
-static double predictQC(double prec) {
-	double QC = 0;
-	double tmp = 0;
-	/*
-	10 - 5 | 5
-	5 - 4 | 1
-	*/
-	
-	if (prec == 0) return 0;
-	if (prec < YA2) {
-		return prec;	} 
-
+	//Close file streams
+	fQc.close();
+	fQo.close();
 	//
+	Log->Text += "------------------------------\r\n";
+	//cout << "Finished Copmutations..." << endl << endl;
+}
+static double predictRainfall(double prec) {
+	
+	double QC = 0;
 
-	if ((prec - YA2) > 0) {
-		QC += YA2; 
+	if (prec < YA2) {
+		return YA2 - prec;
 	} else {
+		prec -= YA2;
 		QC += prec;
-		return QC;
-	}
 
-	if ((prec - YB1) > 0) {
-		QC += YB1;
-	}
-	else {
-		QC += prec;
-		return QC;
-	}
+		if (prec < YB1) {
+			QC += YB1 - prec;
+		} else {
+			prec -= YC1;
+			QC += prec;
 
-	if ((prec - YC1) > 0) {
-		QC += YC1;
+			if (prec < YC1) {
+				QC += YC1 - prec;
+			} else {
+				prec -= YD1;
+				QC += prec;
+			}
+		}
 	}
-	else {
-		QC += prec;
-		return QC;
-	}
-
-	if ((prec - YD1) > 0) {
-		QC += YD1;
-	}
-	else {
-		QC += prec;
-		return QC;
-	}
-
-
-	if(prec > 0)
-		QC += prec;
 
 	return QC;
+	/*
+	if (prec == 0) {
+		QC += 0;
+	}
+	else {
+		QC += YA1;
+		prec -= YA2; //-9
+		if (prec <= 0) {
+			QC += YA2;
+			//QC += YA2 - prec;
+		}
+		else {
+			QC += YB1;
+			prec -= YB1;
+			if (prec <= 0) {
+				QC += YB1 - prec;
+			}
+			else {
+				QC += YC1;
+				prec -= YC1;
+				if (prec <= 0) {
+					QC += YC1 - prec;
+				}
+				else {
+					QC += YD1;
+					prec -= YD1;
+					if (prec <= 0) {
+						QC += YD1 - prec;
+					}
+				}
+			}
+		}
+	}
+	return QC; */
+
+	//QA1
+	/*if (YA1 > QA1) {
+		QA1 = YA1;
+	} else {
+		prec -= YA1;
+		QA1 = prec;
+		//QA2
+		if (YA2 > QA1) {
+			QA2 = YA2;
+			return QA1 + QA2;
+		} else {
+			QA2 = QA1 - YA2;
+			//QB1
+			if (YB1 > QB1) {
+				QB1 = YB1;
+				return QA1 + QA2 + QB1;
+			} else {
+				QB1 = QA2 - YB1;
+				//QC1
+				if (YC1 > QC1) {
+					QC1 = YC1;
+					return QA1 + QA2 + QB1 + QC1;
+				} else {
+					QC1 = QB1 - YC1;
+					//QD1
+					if (YD1 > QD1) { QD1 = YD1; } else { QD1 = QC1 - YD1; }
+					return QA1 + QA2 + QB1 + QC1 + QD1;
+				}
+			}
+		}
+	}
+	return QA1;*/
 }

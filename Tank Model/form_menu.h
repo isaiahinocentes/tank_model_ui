@@ -428,14 +428,14 @@ namespace TankModel {
 				openFileDialog1->Filter = "Text Files|*.txt";
 				openFileDialog1->Title = "Select a Text File with Tank Configuration";
 
-				if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-				{
+				if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+					
 					string path = marshal_as<string>(openFileDialog1->FileName);
 					//Read file and Initialize Drainage Area, Tank Height, P and QO Series
 					
 					file_tank_config(path);
 					//getFromFile(this->Log);
-					this->Log->Text = "---Predicting Rainfall---\r\n";
+					this->Log->Text = "----Predicting Rainfall----\r\n";
 					this->Log->Text += "Tank Height: " + TankHeight + NL;
 					this->Log->Text += "YA1: " + YA1 + NL;
 					this->Log->Text += "YA2: " + YA2 + NL;
@@ -451,22 +451,32 @@ namespace TankModel {
 						string path = marshal_as<string>(openFileDialog1->FileName);
 						read_prec(path);
 
+						ofstream fQc("C:\\Users\\isaia\\Desktop\\FutureQcs.txt");
+						if (fQc.bad()) {
+							MessageBox::Show("Unable to create file for FutureQcs.txt");
+							return;
+						}
+
 						//this->Log->Text += "Precipitations:" + NL;
 
 						//Clear QC
 						vQCalculated.clear();
 						for each (double prec in vPrecipitation) {
-							vQCalculated.push_back(predictQC(prec));
+							vQCalculated.push_back(predictRainfall(prec));
 							//this->Log->Text += NL;
 						}
 
 						this->Log->Text += "-------------" + NL;
 						this->Log->Text += "Precipitation \t QCs" + NL;
 						for (int i = 0; i < vQCalculated.size(); i++) {
+							//Show to Log Textbox
 							this->Log->Text += vPrecipitation.at(i)
 								+ "\t" + vQCalculated.at(i) + NL;
-						}
 
+							//Save to texrt File
+							fQc << vQCalculated.at(i) << endl;
+						}
+						fQc.close();
 						MessageBox::Show("File Read", "Success Predict");
 					}
 					
