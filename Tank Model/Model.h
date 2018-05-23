@@ -77,10 +77,16 @@ static double YD1;
 //Discharge(Qx) Multipliers | 0 or 1
 static double nA1, nA2, nB1, nC1, nD1;
 
+static double ERROR_MARGIN = 0.02;
+static double BASE_MARGIN = 0.03;
 //Init Qs Depending on QO | This uses percentage
 static void init_Heights(double base) {
-	
-	init_Qs_Orifice(base);
+
+	QA1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QA2 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QB1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QC1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
+	QD1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
 	
 	YA1 = 0;
 	YA2 = (QA1 + QA2 + QA0) / 3;
@@ -89,17 +95,6 @@ static void init_Heights(double base) {
 	YD1 = QD1;
 
 	TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
-}
-
-static double ERROR_MARGIN = 0.02;
-static double BASE_MARGIN = 0.03;
-//Initialize Smaller Tank Heights
-static void init_Qs_Orifice(double base) {
-	QA1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
-	QA2 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
-	QB1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
-	QC1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
-	QD1 = random(base * (BASE_MARGIN + ERROR_MARGIN), base * (BASE_MARGIN));
 }
 
 //Init Qs Depending on QO | This uses percentage
