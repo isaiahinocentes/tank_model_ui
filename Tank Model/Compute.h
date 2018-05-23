@@ -80,7 +80,7 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 	fQc << setprecision(10);
 	fQo << setprecision(10);
 
-	Log->Text += "\r\n" + "------------- QCs ----------\r\n";
+	
 	double tmp_QC = 0;
 
 	for (int i = 0; i < vQObserved.size(); i++){
@@ -104,7 +104,9 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 			(QD1 * nD1);
 
 		Log->Text += tmp_QC + "\r\n";
-		//vQCalculated.push_back(tmp_QC);
+
+		//Save to QC
+		vQCalculated.push_back(tmp_QC);
 
 		//Save to file QC
 		fQc << tmp_QC << endl;
@@ -116,9 +118,10 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 	fQc.close();
 	fQo.close();
 	//
-	Log->Text += "------------------------------\r\n";
 	//cout << "Finished Copmutations..." << endl << endl;
 }
+
+//For Predictions
 static double predictRainfall(double prec) {
 	
 	double QC = 0;

@@ -10,34 +10,61 @@ static vector<double> operator-(vector<double>, double);
 static vector<double> operator*(vector<double>, vector<double>);
 
 
-//Add R2 | Range 0 - 1.0 | optimal 1
-static double R2(vector<double> QC, vector<double> QO)
-{
-	return pow(sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO)),2);
+ofstream oef("C:\\Users\\isaia\\Desktop\\OEF_Computations.txt");
+static bool init_file() {
+	if (oef.bad()) {
+		return false;
+	}
+	oef << setprecision(10);
+	return true;
 }
+
 //Correlation Function | Range -1.0 - 1.0 | optimal -1 or 1
 static double COEFFCORREL(vector<double> QC, vector<double> QO)
 {
-	return sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO));
+	double r = sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO));
+	oef << "OEF for R: " << r << endl;
+	return r;
 }
+
+//Add R2 | Range 0 - 1.0 | optimal 1
+static double R2(vector<double> QC, vector<double> QO)
+{
+	double r2 = pow(sum((QC - mean(QC))*(QO - mean(QO))) / (QC.size()*stdev(QC)* stdev(QO)), 2);
+	oef << "OEF for R²: " << r2 << endl;
+	return r2;
+}
+
 //MAE | range 0.0 - inf | optimal 0.0
 static double MAE(vector<double> QC, vector <double> QO) {
 	double suma;
 	int N = QC.size();
 	for (unsigned i = 0; i < N; i++) {
 		suma = abs(QC.at(i) - QO.at(i));
+		oef << suma << endl;
 	}
 	double MAE = suma / N;
+	oef << "OEF for MAE: " << MAE << endl;
+	if (oef.is_open()) {
+		oef.close();
+	}
 	return MAE;
 }
+
 //RMSE | range 0 - inf | 0.0
 static double RMSE(vector <double> QC, vector <double> QO) {
 	double suma;
 	int N = QC.size();
 	for (unsigned i = 0; i < N; i++) {
 		suma = pow(QC.at(i) - QO.at(i), 2);
+		oef << suma << endl;
 	}
 	double rmse = sqrt(suma / N);
+	
+	oef << "OEF for RMSE: " << rmse << endl;
+	if (oef.is_open()) {
+		oef.close();
+	}
 	return rmse;
 }
 
