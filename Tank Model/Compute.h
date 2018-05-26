@@ -66,11 +66,11 @@ static void compute_multipliers() {
 static void compute(System::Windows::Forms::TextBox^ Log) {
 	
 	//File output for QC
-	string optQc = "C:\\Users\\isaia\\Desktop\\optQc.txt";
+	string optQc = "..\\optQc.txt";
 	ofstream fQc(optQc);
 	
 	//File output for QO
-	string optQo = "C:\\Users\\isaia\\Desktop\\optQo.txt";
+	string optQo = "..\\optQo.txt";
 	ofstream fQo(optQo);
 	
 	if (fQc.bad() || fQo.bad()) {
@@ -81,12 +81,35 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 	fQo << setprecision(10);
 
 	
-	double tmp_QC = 0;
+	
 
 	for (int i = 0; i < vQObserved.size(); i++){
 
 		//Initialize QS using QO
 		init_Qs(vQObserved.at(i));
+		/*
+		Log->Text += "["+i+"]"+"\r\n";
+		Log->Text += "\t" + "A0: " + QA0 + "\r\n";
+		Log->Text += "\t" + "A1: " + QA1 + "\r\n";
+		Log->Text += "\t" + "A2: " + QA2/YA2 + "\r\n";
+		Log->Text += "\t" + "B0: " + QB0 + "\r\n";
+		Log->Text += "\t" + "B1: " + QB1 / YB1 + "\r\n";
+		Log->Text += "\t" + "C0: " + QC0 + "\r\n";
+		Log->Text += "\t" + "C1: " + QC1 / YC1 + "\r\n";
+		Log->Text += "\t" + "D1: " + QD1 / YD1 + "\r\n";
+		*/
+
+		/*
+		A0 += QA0;
+		A1 += QA1;
+		A2 += QA2 / YA2;
+		B0 += QB0;
+		B1 += QB1 / YB1;
+		C0 += QC0;
+		C1 += QC1 / YC1;
+		D1 += QD1 / YD1;
+		*/
+		
 
 		//Calculate water level on tanks
 		hA = c_hA(vPrecipitation.at(i), Evap, QA1, QA2, QA0);  //This will be - if P = 0
@@ -112,7 +135,35 @@ static void compute(System::Windows::Forms::TextBox^ Log) {
 		fQc << tmp_QC << endl;
 		//Save to file QO
 		fQo << vQObserved.at(i) << endl;
+
+		A0 += (QA0 / tmp_QC);
+		A1 += (QA1 / tmp_QC);
+		A2 += ((QA2 / YA2) / tmp_QC);
+		B0 += (QB0 / tmp_QC);
+		B1 += ((QB1 / YB1) / tmp_QC);
+		C0 += (QC0 / tmp_QC);
+		C1 += ((QC1 / YC1) / tmp_QC);
+		D1 += ((QD1 / YD1) / tmp_QC);
 	}
+
+	A0 /= vQObserved.size();
+	A1 /= vQObserved.size();
+	A2 /= vQObserved.size();
+	B0 /= vQObserved.size();
+	B1 /= vQObserved.size();
+	C0 /= vQObserved.size();
+	C1 /= vQObserved.size();
+	D1 /= vQObserved.size();
+
+	Log->Text += "\r\n[OUTLET PARRAMETERS]" + "\r\n";
+	Log->Text += "\t" + "A0: " + A0 + "\r\n";
+	Log->Text += "\t" + "A1: " + A1 + "\r\n";
+	Log->Text += "\t" + "A2: " + A2 + "\r\n";
+	Log->Text += "\t" + "B0: " + B0 + "\r\n";
+	Log->Text += "\t" + "B1: " + B1 + "\r\n";
+	Log->Text += "\t" + "C0: " + C0 + "\r\n";
+	Log->Text += "\t" + "C1: " + C1 + "\r\n";
+	Log->Text += "\t" + "D1: " + D1 + "\r\n";
 
 	//Close file streams
 	fQc.close();
@@ -126,7 +177,18 @@ static double predictRainfall(double prec) {
 	
 	double QC = 0;
 
+	/*
+	A0 += (QA0 / tmp_QC);
+	A1 += (QA1 / tmp_QC);
+	A2 += ((QA2 / YA2) / tmp_QC);
+	B0 += (QB0 / tmp_QC);
+	B1 += ((QB1 / YB1) / tmp_QC);
+	C0 += (QC0 / tmp_QC);
+	C1 += ((QC1 / YC1) / tmp_QC);
+	D1 += ((QD1 / YD1) / tmp_QC);
+	*/
 	if (prec < YA2) {
+		A1 += prec;
 		return YA2 - prec;
 	} else {
 		prec -= YA2;

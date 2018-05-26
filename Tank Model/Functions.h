@@ -59,17 +59,25 @@ static boolean file_tank_config(string path) {
 		}
 
 		string str;
-		file >> str;
-		YA1 = atof(str.c_str());
-		file >> str;
-		YA2 = atof(str.c_str());
-		file >> str;
-		YB1 = atof(str.c_str());
-		file >> str;
-		YC1 = atof(str.c_str());
-		file >> str;
-		YD1 = atof(str.c_str());
 
+		file >> str; YA1 = atof(str.c_str());
+		file >> str; YA2 = atof(str.c_str());
+		file >> str; YB1 = atof(str.c_str());
+		file >> str; YC1 = atof(str.c_str());
+		file >> str; YD1 = atof(str.c_str());
+		//Skip the text part
+		file >> str; 
+		file >> str;
+		//
+		file >> str; A0 = atof(str.c_str());
+		file >> str; A1 = atof(str.c_str());
+		file >> str; A2 = atof(str.c_str());
+		file >> str; B0 = atof(str.c_str());
+		file >> str; B1 = atof(str.c_str());
+		file >> str; C0 = atof(str.c_str());
+		file >> str; C1 = atof(str.c_str());
+		file >> str; D1 = atof(str.c_str());
+		
 		TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
 		
 		return true;
@@ -112,7 +120,7 @@ static boolean read_prec(string path) {
 
 static boolean save_file(int method) {
 	
-	ofstream file("C:\\Users\\isaia\\Desktop\\tank_optimized.txt");
+	ofstream file("..\\tank_optimized.txt");
 
 	if (file.good()) {
 		file << setprecision(10);
@@ -121,6 +129,15 @@ static boolean save_file(int method) {
 		file << YB1 << endl;
 		file << YC1 << endl;
 		file << YD1 << endl;
+		file << "OUTLET PARAMETERS:" << endl;
+		file << A0 << endl;
+		file << A1 << endl;
+		file << A2 << endl;
+		file << B0 << endl;
+		file << B1 << endl;
+		file << C0 << endl;
+		file << C1 << endl;
+		file << D1 << endl;
 		return true;
 	}
 

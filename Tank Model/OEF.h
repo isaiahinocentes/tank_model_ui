@@ -10,7 +10,7 @@ static vector<double> operator-(vector<double>, double);
 static vector<double> operator*(vector<double>, vector<double>);
 
 
-ofstream oef("C:\\Users\\isaia\\Desktop\\OEF_Computations.txt");
+ofstream oef("..\\OEF_Computations.txt");
 static bool init_file() {
 	if (oef.bad()) {
 		return false;

@@ -81,6 +81,7 @@ namespace TankModel {
 
 
 
+
 		private:
 			/// <summary>
 			/// Required designer variable.
@@ -273,6 +274,7 @@ namespace TankModel {
 			
 			private: System::Void btn_upload_Click(System::Object^  sender, System::EventArgs^  e) {
 	
+				//Open File Chooser Dialog
 				OpenFileDialog ^openFileDialog1 = gcnew OpenFileDialog();
 				openFileDialog1->Filter = "Text Files|*.txt";
 				openFileDialog1->Title = "Select a Text File";
@@ -354,7 +356,7 @@ namespace TankModel {
 				}
 				//Save File
 				if (save_file(method)) {
-					MessageBox::Show("File Saved: Model.txt", "Success!");
+					MessageBox::Show("File Saved: tank_optimized.txt", "Success!");
 				}
 				else {
 					MessageBox::Show("Unable to Save File!", "Error!");
@@ -394,6 +396,15 @@ namespace TankModel {
 					this->Log->Text += "YB1: " + YB1 + NL;
 					this->Log->Text += "YC1: " + YC1 + NL;
 					this->Log->Text += "YD1: " + YD1 + NL;
+					this->Log->Text += "----Outlet Parameters----\r\n";
+					this->Log->Text += "A0: " + A0 + NL;
+					this->Log->Text += "A1: " + A1 + NL;
+					this->Log->Text += "A2: " + A2 + NL;
+					this->Log->Text += "B0: " + B0 + NL;
+					this->Log->Text += "B1: " + B1 + NL;
+					this->Log->Text += "C0: " + C0 + NL;
+					this->Log->Text += "C1: " + C1 + NL;
+					this->Log->Text += "D1: " + D1 + NL;
 					
 					//Open Precipitation Files
 					openFileDialog1->Filter = "Text Files|*.txt";
@@ -428,6 +439,37 @@ namespace TankModel {
 							//Save to texrt File
 							fQc << vQCalculated.at(i) << endl;
 						}
+						/*
+						A0 += (QA0 / tmp_QC);
+						A1 += (QA1 / tmp_QC);
+						A2 += ((QA2 / YA2) / tmp_QC);
+						B0 += (QB0 / tmp_QC);
+						B1 += ((QB1 / YB1) / tmp_QC);
+						C0 += (QC0 / tmp_QC);
+						C1 += ((QC1 / YC1) / tmp_QC);
+						D1 += ((QD1 / YD1) / tmp_QC);
+
+						A0 /= vQObserved.size();
+						A1 /= vQObserved.size();
+						A2 /= vQObserved.size();
+						B0 /= vQObserved.size();
+						B1 /= vQObserved.size();
+						C0 /= vQObserved.size();
+						C1 /= vQObserved.size();
+						D1 /= vQObserved.size();
+
+						Log->Text += "\r\n[OUTLET PARRAMETERS]" + "\r\n";
+						Log->Text += "\t" + "A0: " + A0 + "\r\n";
+						Log->Text += "\t" + "A1: " + A1 + "\r\n";
+						Log->Text += "\t" + "A2: " + A2 + "\r\n";
+						Log->Text += "\t" + "B0: " + B0 + "\r\n";
+						Log->Text += "\t" + "B1: " + B1 + "\r\n";
+						Log->Text += "\t" + "C0: " + C0 + "\r\n";
+						Log->Text += "\t" + "C1: " + C1 + "\r\n";
+						Log->Text += "\t" + "D1: " + D1 + "\r\n";
+
+						*/
+
 						fQc.close();
 						MessageBox::Show("File Read", "Success Predict");
 					}

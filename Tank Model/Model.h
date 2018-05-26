@@ -46,6 +46,16 @@ static double QComp, QC_ave;
 static vector<double> vQCalculated;
 static double QObs, QO_ave;
 static vector<double> vQObserved;
+//PARAMETERS
+static double tmp_QC = 0;
+static double A0 = 0;
+static double A1 = 0;
+static double A2 = 0;
+static double B0 = 0;
+static double B1 = 0;
+static double C0 = 0;
+static double C1 = 0;
+static double D1 = 0;
 //OEF
 static double OEFv;
 
@@ -67,6 +77,7 @@ static double  HC;
 static double  HD;
 //Discharge(Qx) Multipliers | 0 or 1
 static double nA1, nA2, nB1, nC1, nD1;
+
 
 ///FOR RANDOMIZATIONS AND INITIALIZATIONS
 static double HIGHER_MARGIN = 0.04;
