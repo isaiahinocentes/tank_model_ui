@@ -99,21 +99,21 @@ static void init_Heights(double base) {
 	TankHeight = YA1 + YA2 + YB1 + YC1 + YD1;
 }
 
-static double Q_MARGIN = 0.0;
-//Init Qs Depending on QO | This uses percentage
+//Initialize Smaller Tank Heights
+static double Q_MARGIN = -0.10;
 static void init_Qs(double QO) {
 
-	QA1 = QO * random(.48 + Q_MARGIN, .48);
-	QA2 = QO * random(.33 + Q_MARGIN, .33);
-	QA0 = QO * random(.17 + Q_MARGIN, .17);
+	QA1 = QO * random(.50 + Q_MARGIN, .50);
+	QA2 = QO * random(.40 + Q_MARGIN, .40);
+	QA0 = QO * random(.39 + Q_MARGIN, .39);
 
-	QB1 = QO * random(.09 + Q_MARGIN, .09);
-	QB0 = QO * random(.06 + Q_MARGIN, .06);
+	QB1 = QO * random(.20 + Q_MARGIN, .20);
+	QB0 = QO * random(.19 + Q_MARGIN, .19);
 
-	QC1 = QO * random(.03 + Q_MARGIN, .03);
-	QC0 = QO * random(.02 + Q_MARGIN, .02);
+	QC1 = QO * random(.15 + Q_MARGIN, .15);
+	QC0 = QO * random(.14 + Q_MARGIN, .14);
 
-	QD1 = QO * random(.01 + Q_MARGIN, .01);
+	QD1 = QO * random(.10 + Q_MARGIN, .10);
 }
 
 //Reset Values
